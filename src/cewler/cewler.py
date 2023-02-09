@@ -19,7 +19,7 @@ from constants import *
 from spider import *
 
 __author__ = "Roy Solberg"
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 __program__ = "CeWLeR"
 __description__ = "Custom Word List generator Redefined"
 
@@ -240,7 +240,7 @@ def generate_ui():
         console.print_exception(show_locals=False)
 
 
-def main():
+def cewler():
     console = Console()
     try:
         # insert_dev_arguments()  # Used for development
@@ -264,4 +264,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    cewler()
