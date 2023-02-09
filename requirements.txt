@@ -1,0 +1,4 @@
+# pip3 install -r requirements.txt 
+rich==13.3.1
+Scrapy==2.8.0
+tld==0.12.7

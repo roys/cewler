@@ -1,0 +1,33 @@
+Just some dev notes here. ;)
+
+
+## Packaging
+https://packaging.python.org/en/latest/tutorials/packaging-projects/
+```
+python3 -m pip install --upgrade build
+python3 -m build
+python3 -m pip install --upgrade twine
+python3 -m twine upload --repository pypi dist/*
+
+python3 -m pip install cewler
+
+python3 -m pip install --user virtualenv
+python3 -m venv env
+source env/bin/activate
+which python
+python3 -m pip install cewler
+deactivate
+```
+
+## Test contents
+```
+cd tests/sever
+python3 -m http.server
+http://localhost:8000
+```
+
+## TODO
+- `--include-javascript`
+- `--include-css`?
+- `--include-emails`?
+- `--pipe`?

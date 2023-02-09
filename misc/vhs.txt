@@ -1,0 +1,21 @@
+# https://github.com/charmbracelet/vhs
+# vhs < vhs.txt
+
+Output demo.gif
+
+Set Width 1000
+Set Height 600
+Set FontSize 19
+Set Framerate 60
+
+Set TypingSpeed 0.03
+Type "cewler"
+Sleep 500ms
+Type " --output wordlist.txt"
+Sleep 300ms
+Type " --depth 1"
+Sleep 300ms
+Type " https://blog.roysolberg.com"
+Sleep 400ms
+Enter
+Sleep 15
