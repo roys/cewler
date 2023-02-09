@@ -1,6 +1,6 @@
 import sys
 sys.path.append("src/cewler")  # noqa (to avoid autopep8 organizing imports)
-from cewler import *
+from cewler.spider import *
 
 
 def test_OnlyExactSameDomainSpiderMiddleware():

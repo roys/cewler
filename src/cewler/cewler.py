@@ -15,11 +15,11 @@ from rich.panel import Panel
 from rich.table import Table
 from scrapy.crawler import CrawlerProcess
 
-from constants import *
-from spider import *
+from . import constants
+from . import spider
 
 __author__ = "Roy Solberg"
-__version__ = "1.0.3"
+__version__ = "1.0.6"
 __program__ = "CeWLeR"
 __description__ = "Custom Word List generator Redefined"
 
@@ -68,7 +68,7 @@ def get_parsed_args_and_init_parser():
     parser.add_argument("-r", "--rate", type=int, default=20, help="requests per second (default: 20)")
     parser.add_argument("-s", "--subdomain_strategy", choices=["all", "children", "exact"], default="exact", help="allow crawling [all] domains, including children and siblings, only [exact] the same (sub)domain (default), or same domain and any belonging [children]")
     parser.add_argument("--stream", action="store_true", default=False, help="writes to file after each request (may produce duplicates because of threading) (default: false)")
-    parser.add_argument("-u", "--user-agent", default=DEFAULT_USER_AGENT, help=f"User-Agent header to send (default: {DEFAULT_USER_AGENT})")
+    parser.add_argument("-u", "--user-agent", default=constants.DEFAULT_USER_AGENT, help=f"User-Agent header to send (default: {constants.DEFAULT_USER_AGENT})")
     parser.add_argument("-v", "--verbose", action="store_true", help="A bit more detailed output")
     parser.add_argument("-w", "--without-numbers", action="store_true", help="ignore words are numbers or contain numbers")
 
@@ -84,11 +84,11 @@ def get_scrapy_settings_and_init_logging(user_agent, depth_limit, reqs_per_sec, 
     logging.getLogger("scrapy").propagate = False
 
     if subdomain_strategy == "all":
-        offsite_class = "__main__.AnyParentAndSisterAndSubdomainMiddleware"
-    elif args.subdomain_strategy == "children":
-        offsite_class = "__main__.OnlyChildrenSubdomainAndSameDomainSpiderMiddleware"
+        offsite_class = "cewler.spider.AnyParentAndSisterAndSubdomainMiddleware"
+    elif subdomain_strategy == "children":
+        offsite_class = "cewler.spider.OnlyChildrenSubdomainAndSameDomainSpiderMiddleware"
     else:  # "exact"
-        offsite_class = "__main__.OnlyExactSameDomainSpiderMiddleware"
+        offsite_class = "cewler.spider.OnlyExactSameDomainSpiderMiddleware"
 
     middleware_settings = {
         "scrapy.spidermiddlewares.offsite.OffsiteMiddleware": None,
@@ -139,7 +139,7 @@ def get_live_ui(args):
     nice_words = "Lowercase" if args.lowercase else "Mixed case"
     nice_words += ", " + ("excl. numbers" if args.without_numbers else "incl. numbers")
     nice_words += f", min. {args.min_word_length} chars."
-    nice_ua = "Default" if DEFAULT_USER_AGENT == args.user_agent else "Custom"
+    nice_ua = "Default" if constants.DEFAULT_USER_AGENT == args.user_agent else "Custom"
     nice_ua += " (" + textwrap.shorten(args.user_agent, width=40, placeholder="...") + ")"
     nice_output = "Screen only" if args.output is None else args.output
 
@@ -250,7 +250,7 @@ def cewler():
 
         with live:
             process = CrawlerProcess(get_scrapy_settings_and_init_logging(args.user_agent, args.depth, args.rate, args.subdomain_strategy))
-            process.crawl(CewlerSpider, console=console, url=args.url, file=args.output, should_lowercase=args.lowercase, without_numbers=args.without_numbers, min_word_length=args.min_word_length, verbose=args.verbose, stream_to_file=args.stream, spider_event_callback=on_spider_event)
+            process.crawl(spider.CewlerSpider, console=console, url=args.url, file=args.output, should_lowercase=args.lowercase, without_numbers=args.without_numbers, min_word_length=args.min_word_length, verbose=args.verbose, stream_to_file=args.stream, spider_event_callback=on_spider_event)
             process.start()
         print("")
 

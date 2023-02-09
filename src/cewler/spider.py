@@ -9,7 +9,7 @@ from scrapy.spidermiddlewares import offsite
 from scrapy.spiders import CrawlSpider, Rule
 import scrapy.core.downloader.handlers.http
 
-from constants import *
+from . import constants
 
 
 class OnlyExactSameDomainSpiderMiddleware(offsite.OffsiteMiddleware):
@@ -125,7 +125,7 @@ class CewlerSpider(CrawlSpider):
     def _get_words_from_text(self, text):
         new_words = []
         text = html.unescape(text)
-        text = re.sub(CHARACTERS_TO_FILTER_AWAY, " ", text)  # Filter characters
+        text = re.sub(constants.CHARACTERS_TO_FILTER_AWAY, " ", text)  # Filter characters
         text = re.sub("\s+", " ", text)  # Replace all spacing with one space
         if self.should_lowercase:
             text = text.lower()
@@ -133,7 +133,7 @@ class CewlerSpider(CrawlSpider):
             word = word.strip()
             while True:
                 found = False
-                for c in CHARACTERS_ALLOWED_IN_WORDS_BUT_NOT_IN_START_OR_END:
+                for c in constants.CHARACTERS_ALLOWED_IN_WORDS_BUT_NOT_IN_START_OR_END:
                     if word.startswith(c):
                         word = word[1:]
                         found = True
@@ -170,7 +170,7 @@ class CewlerSpider(CrawlSpider):
     def _get_words_from_html_response(self, response):
         new_words = set()
         try:
-            for item in response.xpath(XPATH_TEXT):
+            for item in response.xpath(constants.XPATH_TEXT):
                 new_words.update(self._get_words_from_text(item.get()))
             if len(new_words) > 0:
                 if self.file is not None and self.stream_to_file:

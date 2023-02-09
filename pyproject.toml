@@ -7,7 +7,7 @@ dependencies = {file = ["requirements.txt"]}
 
 [project]
 name = "cewler"
-version = "1.0.3"
+version = "1.0.6"
 authors = [
   { name="Roy Solberg", email="pypi-0q238r@roysolberg.com" },
 ]
@@ -34,7 +34,7 @@ classifiers = [
 ]
 
 [project.scripts]
-cewler = "cewler:main"
+cewler = "cewler.cewler:cewler"
 
 [project.urls]
 "Homepage" = "https://github.com/roys/cewler"
