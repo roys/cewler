@@ -1,5 +1,5 @@
 # CeWLeR - Custom Word List generator Redefined
-_CeWLeR_ crawls from a given URL and collects words create get great custom wordlists.
+_CeWLeR_ crawls from a specified URL and collects words to create a custom wordlist.
 
 It's a great tool for security testers and bug bounty hunters. The lists can be used for password cracking, subdomain enumeration, directory and file brute forcing, API endpoint discovery, etc. It's good to have an additional target specific wordlist that is different than what everybody else use.
 
