@@ -72,7 +72,7 @@ def get_parsed_args_and_init_parser():
     parser.add_argument("-v", "--verbose", action="store_true", help="A bit more detailed output")
     parser.add_argument("-w", "--without-numbers", action="store_true", help="ignore words are numbers or contain numbers")
 
-    args = parser.parse_args()
+    args = parser.parse_args(args=None if sys.argv[1:] else ['--help'])
     if args.stream and args.output is None:
         exit("cewler: error: Argument --stream cannot be used without a file specified with --output")
     return args
@@ -240,11 +240,12 @@ def generate_ui():
         console.print_exception(show_locals=False)
 
 
-if __name__ == "__main__":
+def main():
     console = Console()
     try:
         # insert_dev_arguments()  # Used for development
         args = get_parsed_args_and_init_parser()
+        global live
         live = get_live_ui(args)
 
         with live:
@@ -260,3 +261,7 @@ if __name__ == "__main__":
                 print("")
     except Exception:
         console.print_exception(show_locals=False)
+
+
+if __name__ == "__main__":
+    main()

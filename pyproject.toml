@@ -28,6 +28,9 @@ classifiers = [
     "Natural Language :: English"
 ]
 
+[project.scripts]
+cewler = "cewler:main"
+
 [project.urls]
 "Homepage" = "https://github.com/roys/cewler"
 "Bug Tracker" = "https://github.com/roys/cewler/issues"
