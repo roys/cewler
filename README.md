@@ -81,6 +81,8 @@ If you want to do some tweaking you yourself you can probably find what you want
 
 ## Installation
 ### Alternative 1 - installing from PyPI
+Package homepage: https://pypi.org/project/cewler/
+
 `python3 -m pip install cewler`
 
 ### Alternative 2 - installing from GitHub
