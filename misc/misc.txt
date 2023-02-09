@@ -27,6 +27,7 @@ http://localhost:8000
 ```
 
 ## TODO
+- Table with strategies and domains
 - `--include-javascript`
 - `--include-css`?
 - `--include-emails`?

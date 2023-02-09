@@ -88,7 +88,7 @@ If you want to do some tweaking you yourself you can probably find what you want
 `git clone https://github.com/roys/cewler.git --depth 1`
 
 #### 2. Install dependencies
-`pip3 install -r requirements.txt`
+`python3 -m pip install -r requirements.txt`
 
 #### 3. Shortcut on Un*x based system (optional)
 ```
