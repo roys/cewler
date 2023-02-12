@@ -39,3 +39,4 @@ cewler = "cewler.cewler:cewler"
 [project.urls]
 "Homepage" = "https://github.com/roys/cewler"
 "Bug Tracker" = "https://github.com/roys/cewler/issues"
+"Changelog" = "https://github.com/roys/cewler/blob/main/CHANGELOG.md"
