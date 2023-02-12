@@ -15,11 +15,19 @@ from rich.panel import Panel
 from rich.table import Table
 from scrapy.crawler import CrawlerProcess
 
-from . import constants
-from . import spider
+try:
+    from . import constants
+    from . import spider
+    spider_package = "cewler."
+except ImportError:  # When running this file directly
+    sys.path.insert(0, os.path.abspath('.'))
+    import constants
+    import spider
+    spider_package = ""
+
 
 __author__ = "Roy Solberg"
-__version__ = "1.0.6"
+__version__ = "1.0.7"
 __program__ = "CeWLeR"
 __description__ = "Custom Word List generator Redefined"
 
@@ -84,11 +92,11 @@ def get_scrapy_settings_and_init_logging(user_agent, depth_limit, reqs_per_sec, 
     logging.getLogger("scrapy").propagate = False
 
     if subdomain_strategy == "all":
-        offsite_class = "cewler.spider.AnyParentAndSisterAndSubdomainMiddleware"
+        offsite_class = f"{spider_package}spider.AnyParentAndSisterAndSubdomainMiddleware"
     elif subdomain_strategy == "children":
-        offsite_class = "cewler.spider.OnlyChildrenSubdomainAndSameDomainSpiderMiddleware"
+        offsite_class = f"{spider_package}spider.OnlyChildrenSubdomainAndSameDomainSpiderMiddleware"
     else:  # "exact"
-        offsite_class = "cewler.spider.OnlyExactSameDomainSpiderMiddleware"
+        offsite_class = f"{spider_package}spider.OnlyExactSameDomainSpiderMiddleware"
 
     middleware_settings = {
         "scrapy.spidermiddlewares.offsite.OffsiteMiddleware": None,
@@ -102,6 +110,7 @@ def get_scrapy_settings_and_init_logging(user_agent, depth_limit, reqs_per_sec, 
         "DEPTH_LIMIT": depth_limit,
         "DOWNLOAD_DELAY": 1/reqs_per_sec,
         "SPIDER_MIDDLEWARES": middleware_settings,
+        "HTTPERROR_ALLOW_ALL": True
         # "CONCURRENT_REQUESTS": 16
         # "CONCURRENT_REQUESTS_PER_DOMAIN": 8
         # "CONCURRENT_REQUESTS_PER_IP": 0
@@ -241,6 +250,7 @@ def generate_ui():
 
 
 def cewler():
+    global console
     console = Console()
     try:
         # insert_dev_arguments()  # Used for development

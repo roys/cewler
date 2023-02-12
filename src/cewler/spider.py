@@ -9,7 +9,13 @@ from scrapy.spidermiddlewares import offsite
 from scrapy.spiders import CrawlSpider, Rule
 import scrapy.core.downloader.handlers.http
 
-from . import constants
+try:
+    from . import constants
+except ImportError:  # When running this file directly
+    import os
+    import sys
+    sys.path.insert(0, os.path.abspath('.'))
+    import constants
 
 
 class OnlyExactSameDomainSpiderMiddleware(offsite.OffsiteMiddleware):
@@ -199,6 +205,10 @@ class CewlerSpider(CrawlSpider):
                         "title": response.css("title::text").get(),
                         "words:": self._get_words_from_html_response(response),
                     }
+                    for item in response.xpath(constants.XPATH_COMMENT):
+                        inside_comment = item.get().replace("<!--", "").replace("-->", "")
+                        for link in LinkExtractor().extract_links(scrapy.http.TextResponse(url=response.url, body=bytes(inside_comment, encoding="utf-8"))):
+                            yield response.follow(link, callback=self.parse_item)
                 elif (b"text/plain" in content_type):
                     yield {
                         "url": response.url,

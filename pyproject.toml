@@ -7,7 +7,7 @@ dependencies = {file = ["requirements.txt"]}
 
 [project]
 name = "cewler"
-version = "1.0.6"
+version = "1.0.7"
 authors = [
   { name="Roy Solberg", email="pypi-0q238r@roysolberg.com" },
 ]
