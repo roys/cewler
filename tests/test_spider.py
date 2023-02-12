@@ -5,7 +5,7 @@ from cewler.spider import *
 
 def test_OnlyExactSameDomainSpiderMiddleware():
     url = "http://example.com"
-    spider = CewlerSpider(Console(), url, file=None)
+    spider = CewlerSpider(Console(), url, file_words=None)
     mw = OnlyExactSameDomainSpiderMiddleware(stats=None)
     pattern = mw.get_host_regex(spider)
     assert pattern.match("example.com") != None
@@ -15,7 +15,7 @@ def test_OnlyExactSameDomainSpiderMiddleware():
     assert pattern.match("sub.subdomain.example.com") == None
 
     url = "https://subdomain.example.com"
-    spider = CewlerSpider(Console(), url, file=None)
+    spider = CewlerSpider(Console(), url, file_words=None)
     mw = OnlyExactSameDomainSpiderMiddleware(stats=None)
     pattern = mw.get_host_regex(spider)
     assert pattern.match("example.com") == None
@@ -27,7 +27,7 @@ def test_OnlyExactSameDomainSpiderMiddleware():
 
 def test_OnlyChildrenSubdomainAndSameDomainSpiderMiddleware():
     url = "http://example.com"
-    spider = CewlerSpider(Console(), url, file=None)
+    spider = CewlerSpider(Console(), url, file_words=None)
     mw = OnlyChildrenSubdomainAndSameDomainSpiderMiddleware(stats=None)
     pattern = mw.get_host_regex(spider)
     assert pattern.match("example.com") != None
@@ -37,7 +37,7 @@ def test_OnlyChildrenSubdomainAndSameDomainSpiderMiddleware():
     assert pattern.match("sub.subdomain.example.com") != None
 
     url = "http://subdomain.example.com"
-    spider = CewlerSpider(Console(), url, file=None)
+    spider = CewlerSpider(Console(), url, file_words=None)
     mw = OnlyChildrenSubdomainAndSameDomainSpiderMiddleware(stats=None)
     pattern = mw.get_host_regex(spider)
     assert pattern.match("example.com") == None
@@ -50,7 +50,7 @@ def test_OnlyChildrenSubdomainAndSameDomainSpiderMiddleware():
 
 def test_AnyParentAndSisterAndSubdomainMiddleware():
     url = "https://example.com"
-    spider = CewlerSpider(Console(), url, file=None)
+    spider = CewlerSpider(Console(), url, file_words=None)
     mw = AnyParentAndSisterAndSubdomainMiddleware(stats=None)
     pattern = mw.get_host_regex(spider)
     assert pattern.match("example.com") != None
@@ -62,7 +62,7 @@ def test_AnyParentAndSisterAndSubdomainMiddleware():
     assert pattern.match("www.example.com") != None
 
     url = "http://subdomain.example.com"
-    spider = CewlerSpider(Console(), url, file=None)
+    spider = CewlerSpider(Console(), url, file_words=None)
     mw = AnyParentAndSisterAndSubdomainMiddleware(stats=None)
     pattern = mw.get_host_regex(spider)
     assert pattern.match("example.com") != None
@@ -73,7 +73,7 @@ def test_AnyParentAndSisterAndSubdomainMiddleware():
     assert pattern.match("sub.subdomain.example.com") != None
 
     url = "https://google.co.uk"
-    spider = CewlerSpider(Console(), url, file=None)
+    spider = CewlerSpider(Console(), url, file_words=None)
     mw = AnyParentAndSisterAndSubdomainMiddleware(stats=None)
     pattern = mw.get_host_regex(spider)
     assert pattern.match("google.co.uk") != None
@@ -83,7 +83,7 @@ def test_AnyParentAndSisterAndSubdomainMiddleware():
     assert pattern.match("sub.subdomain.google.co.uk") != None
 
     url = "https://supersub.google.co.uk"
-    spider = CewlerSpider(Console(), url, file=None)
+    spider = CewlerSpider(Console(), url, file_words=None)
     mw = AnyParentAndSisterAndSubdomainMiddleware(stats=None)
     pattern = mw.get_host_regex(spider)
     assert pattern.match("google.co.uk") != None

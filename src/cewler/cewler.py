@@ -47,6 +47,8 @@ def insert_dev_arguments():
         sys.argv.append("http://localhost:8000")
         sys.argv.append("-o")
         sys.argv.append("wordlist-dev.txt")
+        sys.argv.append("--output-urls")
+        sys.argv.append("urls-dev.txt")
         sys.argv.append("--subdomain_strategy")
         sys.argv.append("all")
         # sys.argv.append("children")
@@ -73,6 +75,7 @@ def get_parsed_args_and_init_parser():
     parser.add_argument("-l", "--lowercase", action="store_true", help="lowercase all parsed words")
     parser.add_argument("-m", "--min-word-length", type=int, default=5)
     parser.add_argument("-o", "--output", help="file were to stream and store wordlist instead of screen (default: screen)")
+    parser.add_argument("-ou", "--output-urls", help="file were to stream and store URLs visited (default: not outputted)")
     parser.add_argument("-r", "--rate", type=int, default=20, help="requests per second (default: 20)")
     parser.add_argument("-s", "--subdomain_strategy", choices=["all", "children", "exact"], default="exact", help="allow crawling [all] domains, including children and siblings, only [exact] the same (sub)domain (default), or same domain and any belonging [children]")
     parser.add_argument("--stream", action="store_true", default=False, help="writes to file after each request (may produce duplicates because of threading) (default: false)")
@@ -260,7 +263,8 @@ def cewler():
 
         with live:
             process = CrawlerProcess(get_scrapy_settings_and_init_logging(args.user_agent, args.depth, args.rate, args.subdomain_strategy))
-            process.crawl(spider.CewlerSpider, console=console, url=args.url, file=args.output, should_lowercase=args.lowercase, without_numbers=args.without_numbers, min_word_length=args.min_word_length, verbose=args.verbose, stream_to_file=args.stream, spider_event_callback=on_spider_event)
+            process.crawl(spider.CewlerSpider, console=console, url=args.url, file_words=args.output, file_urls=args.output_urls, should_lowercase=args.lowercase,
+                          without_numbers=args.without_numbers, min_word_length=args.min_word_length, verbose=args.verbose, stream_to_file=args.stream, spider_event_callback=on_spider_event)
             process.start()
         print("")
 

@@ -54,7 +54,7 @@ class AnyParentAndSisterAndSubdomainMiddleware(offsite.OffsiteMiddleware):
 class CewlerSpider(CrawlSpider):
     name = "CeWLeR"
 
-    def __init__(self, console, url, file=None, should_lowercase=False, without_numbers=False, min_word_length=5, verbose=False, spider_event_callback=None, stream_to_file=False, *args, **kwargs):
+    def __init__(self, console, url, file_words=None, file_urls=None, should_lowercase=False, without_numbers=False, min_word_length=5, verbose=False, spider_event_callback=None, stream_to_file=False, *args, **kwargs):
         self.console = console
         self.should_lowercase = should_lowercase
         self.without_numbers = without_numbers
@@ -63,6 +63,7 @@ class CewlerSpider(CrawlSpider):
         self.spider_event_callback = spider_event_callback
         self.stream_to_file = stream_to_file
         self.words_found = set()
+        self.urls_parsed = set()
         self.visited_domains = set()
         self.exceptions = []
         self.unsupported_content_types = set()
@@ -74,7 +75,8 @@ class CewlerSpider(CrawlSpider):
             self.start_urls = [url]
 
             self.allowed_domains = [self.get_allowed(url)]
-            self.file = open(file, mode="w") if file is not None else None
+            self.file_words = open(file_words, mode="w") if file_words is not None else None
+            self.file_urls = open(file_urls, mode="w") if file_urls is not None else None
         except Exception:
             self.console.print_exception(show_locals=False)
             raise scrapy.exceptions.CloseSpider()
@@ -119,12 +121,19 @@ class CewlerSpider(CrawlSpider):
 
     def spider_closed(self, spider):
         self.words_found = sorted(self.words_found)
-        if self.file is not None and not self.stream_to_file:
-            self.last_status = "writing_to_file"
-            for word in self.words_found:
-                self.file.write(word)
-                self.file.write("\n")
-            self.file.close()
+        if not self.stream_to_file:
+            if self.file_words is not None:
+                self.last_status = "writing_to_file"
+                for word in self.words_found:
+                    self.file_words.write(word)
+                    self.file_words.write("\n")
+                self.file_words.close()
+            if self.file_urls is not None:
+                self.last_status = "writing_to_file"
+                for url in sorted(self.urls_parsed):
+                    self.file_urls.write(url)
+                    self.file_urls.write("\n")
+                self.file_urls.close()
         self.last_status = "spider_closed"
         self.send_spider_callback()
 
@@ -161,12 +170,12 @@ class CewlerSpider(CrawlSpider):
         try:
             new_words = self._get_words_from_text(response.text)
             if len(new_words) > 0:
-                if self.file is not None and self.stream_to_file:
+                if self.file_words is not None and self.stream_to_file:
                     for word in new_words:
                         if word not in self.words_found:
                             self.words_found.add(word)
-                            self.file.write(word + "\n")
-                    self.file.flush()
+                            self.file_words.write(word + "\n")
+                    self.file_words.flush()
                 else:
                     self.words_found.update(new_words)
         except Exception as e:
@@ -179,12 +188,12 @@ class CewlerSpider(CrawlSpider):
             for item in response.xpath(constants.XPATH_TEXT):
                 new_words.update(self._get_words_from_text(item.get()))
             if len(new_words) > 0:
-                if self.file is not None and self.stream_to_file:
+                if self.file_words is not None and self.stream_to_file:
                     for word in new_words:
                         if word not in self.words_found:
                             self.words_found.add(word)
-                            self.file.write(word + "\n")
-                    self.file.flush()
+                            self.file_words.write(word + "\n")
+                    self.file_words.flush()
                 else:
                     self.words_found.update(new_words)
         except Exception as e:
@@ -193,6 +202,13 @@ class CewlerSpider(CrawlSpider):
 
     def parse_item(self, response):
         try:
+            if self.stream_to_file and self.file_urls is not None:
+                if response.url not in self.urls_parsed:
+                    self.urls_parsed.add(response.url)
+                    self.file_urls.write(response.url + "\n")
+                self.file_urls.flush()
+            else:
+                self.urls_parsed.add(response.url)
             headers = {key.lower(): value for key, value in response.headers.items()}
             if (b"content-type" in headers.keys()):
                 tld_obj = tld.get_tld(response.url, as_object=True, fail_silently=True)
