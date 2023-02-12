@@ -5,8 +5,8 @@ Just some dev notes here. ;)
 https://packaging.python.org/en/latest/tutorials/packaging-projects/
 ```
 python3 -m pip install --upgrade build
-python3 -m build
 python3 -m pip install --upgrade twine
+python3 -m build
 python3 -m twine upload --repository pypi dist/cewler-1.0.3*
 
 python3 -m pip install cewler --upgrade
@@ -25,6 +25,9 @@ cd tests/sever
 python3 -m http.server
 http://localhost:8000
 ```
+
+it tag -a v1.0.7 -m "Release"
+
 
 ## TODO
 - Table with strategies and domains

@@ -6,7 +6,7 @@ It's a great tool for security testers and bug bounty hunters. The lists can be 
 _CeWLeR_ was sort of originally inspired by the really nice tool [CeWL](https://github.com/digininja/CeWL). I had some challenges with _CeWL_ on a site I wanted a wordlist from, but without any Ruby experience I didn't know how to contribute and work around it. So instead I created a custom word list generator in Python to get the job done.
 
 ## At a glance
-<img src="https://github.com/roys/cewler/blob/main/misc/demo.gif?raw=true" width="800" height="480"/>
+<img src="https://github.com/roys/cewler/blob/main/misc/demo.gif?raw=true" width="800" />
 
 ## Features
 - Generates custom wordlists by scraping words from web sites
