@@ -56,6 +56,7 @@ def insert_dev_arguments():
         sys.argv.append("--depth")
         sys.argv.append("0")
         sys.argv.append("--include-js")
+        sys.argv.append("--include-css")
         # sys.argv.append("--min-word-length")
         # sys.argv.append("5")
         # sys.argv.append("--stream")
@@ -73,6 +74,7 @@ def get_parsed_args_and_init_parser():
 
     parser.add_argument("url", help="URL to start crawling from")
     parser.add_argument("-d", "--depth", type=int, default=2, help="directory path depth to crawl, 0 for unlimited (default: 2)")
+    parser.add_argument("-css", "--include-css", action="store_true", help="include CSS from external files and <style> tags")
     parser.add_argument("-js", "--include-js", action="store_true", help="include JavaScript from external files and <script> tags")
     parser.add_argument("-l", "--lowercase", action="store_true", help="lowercase all parsed words")
     parser.add_argument("-m", "--min-word-length", type=int, default=5)
@@ -265,7 +267,7 @@ def cewler():
 
         with live:
             process = CrawlerProcess(get_scrapy_settings_and_init_logging(args.user_agent, args.depth, args.rate, args.subdomain_strategy))
-            process.crawl(spider.CewlerSpider, console=console, url=args.url, file_words=args.output, file_urls=args.output_urls, include_js=args.include_js, should_lowercase=args.lowercase,
+            process.crawl(spider.CewlerSpider, console=console, url=args.url, file_words=args.output, file_urls=args.output_urls, include_js=args.include_js, include_css=args.include_css, should_lowercase=args.lowercase,
                           without_numbers=args.without_numbers, min_word_length=args.min_word_length, verbose=args.verbose, stream_to_file=args.stream, spider_event_callback=on_spider_event)
             process.start()
         print("")

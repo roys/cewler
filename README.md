@@ -61,6 +61,7 @@ options:
   -h, --help            show this help message and exit
   -d DEPTH, --depth DEPTH
                         directory path depth to crawl, 0 for unlimited (default: 2)
+  -css, --include-css   include CSS from external files and <style> tags
   -js, --include-js     include JavaScript from external files and <script> tags
   -l, --lowercase       lowercase all parsed words
   -m MIN_WORD_LENGTH, --min-word-length MIN_WORD_LENGTH

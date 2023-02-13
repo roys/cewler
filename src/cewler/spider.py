@@ -54,7 +54,7 @@ class AnyParentAndSisterAndSubdomainMiddleware(offsite.OffsiteMiddleware):
 class CewlerSpider(CrawlSpider):
     name = "CeWLeR"
 
-    def __init__(self, console, url, file_words=None, file_urls=None, include_js=False, should_lowercase=False, without_numbers=False, min_word_length=5, verbose=False, spider_event_callback=None, stream_to_file=False, *args, **kwargs):
+    def __init__(self, console, url, file_words=None, file_urls=None, include_js=False, include_css=False, should_lowercase=False, without_numbers=False, min_word_length=5, verbose=False, spider_event_callback=None, stream_to_file=False, *args, **kwargs):
         self.console = console
         self.should_lowercase = should_lowercase
         self.without_numbers = without_numbers
@@ -70,11 +70,23 @@ class CewlerSpider(CrawlSpider):
         self.log_lines = []
         self.last_status = "init"
         self.include_js = include_js
-        if self.include_js:
-            self.link_extractor = LinkExtractor(tags=("a", "area", "script"), attrs=("href", "src"),)
+        self.include_css = include_css
+        if self.include_js and self.include_css:
+            deny_extensions = scrapy.linkextractors.IGNORED_EXTENSIONS
+            deny_extensions.remove("css")
+            self.link_extractor = LinkExtractor(tags=("a", "area", "script", "link"), attrs=("href", "src"), deny_extensions=deny_extensions)
+            self.xpath = constants.XPATH_TEXT_INCLUDE_JAVASCRIPT_AND_CSS
+        elif self.include_js:
+            self.link_extractor = LinkExtractor(tags=("a", "area", "script"), attrs=("href", "src"))
+            self.xpath = constants.XPATH_TEXT_INCLUDE_JAVASCRIPT
+        elif self.include_css:
+            deny_extensions = scrapy.linkextractors.IGNORED_EXTENSIONS
+            deny_extensions.remove("css")
+            self.link_extractor = LinkExtractor(tags=("a", "area", "link"), attrs=("href", "src"), deny_extensions=deny_extensions)
+            self.xpath = constants.XPATH_TEXT_INCLUDE_CSS
         else:
             self.link_extractor = LinkExtractor()
-
+            self.xpath = constants.XPATH_TEXT
         try:
             self.rules = (Rule(self.link_extractor, follow=True, callback="parse_item"),)
             super(CewlerSpider, self).__init__(*args, **kwargs)
@@ -191,7 +203,7 @@ class CewlerSpider(CrawlSpider):
     def _get_words_from_html_response(self, response):
         new_words = set()
         try:
-            for item in response.xpath(constants.XPATH_TEXT_INCLUDE_JAVASCRIPT if self.include_js else constants.XPATH_TEXT):
+            for item in response.xpath(self.xpath):
                 new_words.update(self._get_words_from_text(item.get()))
             if len(new_words) > 0:
                 if self.file_words is not None and self.stream_to_file:
@@ -238,6 +250,12 @@ class CewlerSpider(CrawlSpider):
                         "words:": self._get_words_from_text_response(response),
                     }
                 elif self.include_js and (b"script" in content_type or b"application/json" in content_type or b"application/ld+json" in content_type):
+                    yield {
+                        "url": response.url,
+                        "title": "",
+                        "words:": self._get_words_from_text_response(response),
+                    }
+                elif self.include_css and (b"text/css" in content_type):
                     yield {
                         "url": response.url,
                         "title": "",
