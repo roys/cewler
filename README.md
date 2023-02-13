@@ -50,7 +50,7 @@ If it just takes too long to crawl a site you can press `ctrl + c` once(!) and w
 ### All options
 ```
 cewler -h
-usage: cewler [-h] [-d DEPTH] [-l] [-m MIN_WORD_LENGTH] [-o OUTPUT] [-r RATE] [-s {all,children,exact}] [--stream] [-u USER_AGENT] [-v] [-w] url
+usage: cewler [-h] [-d DEPTH] [-js] [-l] [-m MIN_WORD_LENGTH] [-o OUTPUT] [-ou OUTPUT_URLS] [-r RATE] [-s {all,children,exact}] [--stream] [-u USER_AGENT] [-v] [-w] url
 
 Custom Word List generator Redefined
 
@@ -61,10 +61,13 @@ options:
   -h, --help            show this help message and exit
   -d DEPTH, --depth DEPTH
                         directory path depth to crawl, 0 for unlimited (default: 2)
+  -js, --include-js     include JavaScript from external files and <script> tags
   -l, --lowercase       lowercase all parsed words
   -m MIN_WORD_LENGTH, --min-word-length MIN_WORD_LENGTH
   -o OUTPUT, --output OUTPUT
                         file were to stream and store wordlist instead of screen (default: screen)
+  -ou OUTPUT_URLS, --output-urls OUTPUT_URLS
+                        file were to stream and store URLs visited (default: not outputted)
   -r RATE, --rate RATE  requests per second (default: 20)
   -s {all,children,exact}, --subdomain_strategy {all,children,exact}
                         allow crawling [all] domains, including children and siblings, only [exact] the same (sub)domain (default), or same domain and any belonging [children]
@@ -79,11 +82,15 @@ options:
 ### Digging into the code
 If you want to do some tweaking you yourself you can probably find what you want in [blob/main/src/constants.py](blob/main/src/constants.py) and [blob/main/src/spider.py](blob/main/src/spider.py)
 
-## Installation
+## Installation and upgrade
 ### Alternative 1 - installing from PyPI
 Package homepage: https://pypi.org/project/cewler/
 
 `python3 -m pip install cewler`
+
+#### Upgrade
+`python3 -m pip install cewler --upgrade`
+
 
 ### Alternative 2 - installing from GitHub
 #### 1. Clone repository
@@ -99,6 +106,10 @@ chmod +x cewler.py
 ln -s $(pwd)/cewler.py /usr/local/bin/cewler
 cewler -h
 ```
+
+#### Upgrade
+`git pull`
+
 
 ## Pronunciation
 _CeWLeR_ is pronounced _"cooler"_.

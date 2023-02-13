@@ -54,7 +54,7 @@ class AnyParentAndSisterAndSubdomainMiddleware(offsite.OffsiteMiddleware):
 class CewlerSpider(CrawlSpider):
     name = "CeWLeR"
 
-    def __init__(self, console, url, file_words=None, file_urls=None, should_lowercase=False, without_numbers=False, min_word_length=5, verbose=False, spider_event_callback=None, stream_to_file=False, *args, **kwargs):
+    def __init__(self, console, url, file_words=None, file_urls=None, include_js=False, should_lowercase=False, without_numbers=False, min_word_length=5, verbose=False, spider_event_callback=None, stream_to_file=False, *args, **kwargs):
         self.console = console
         self.should_lowercase = should_lowercase
         self.without_numbers = without_numbers
@@ -69,8 +69,14 @@ class CewlerSpider(CrawlSpider):
         self.unsupported_content_types = set()
         self.log_lines = []
         self.last_status = "init"
+        self.include_js = include_js
+        if self.include_js:
+            self.link_extractor = LinkExtractor(tags=("a", "area", "script"), attrs=("href", "src"),)
+        else:
+            self.link_extractor = LinkExtractor()
+
         try:
-            self.rules = (Rule(LinkExtractor(), follow=True, callback="parse_item"),)
+            self.rules = (Rule(self.link_extractor, follow=True, callback="parse_item"),)
             super(CewlerSpider, self).__init__(*args, **kwargs)
             self.start_urls = [url]
 
@@ -185,7 +191,7 @@ class CewlerSpider(CrawlSpider):
     def _get_words_from_html_response(self, response):
         new_words = set()
         try:
-            for item in response.xpath(constants.XPATH_TEXT):
+            for item in response.xpath(constants.XPATH_TEXT_INCLUDE_JAVASCRIPT if self.include_js else constants.XPATH_TEXT):
                 new_words.update(self._get_words_from_text(item.get()))
             if len(new_words) > 0:
                 if self.file_words is not None and self.stream_to_file:
@@ -223,9 +229,15 @@ class CewlerSpider(CrawlSpider):
                     }
                     for item in response.xpath(constants.XPATH_COMMENT):
                         inside_comment = item.get().replace("<!--", "").replace("-->", "")
-                        for link in LinkExtractor().extract_links(scrapy.http.TextResponse(url=response.url, body=bytes(inside_comment, encoding="utf-8"))):
+                        for link in self.link_extractor.extract_links(scrapy.http.TextResponse(url=response.url, body=bytes(inside_comment, encoding="utf-8"))):
                             yield response.follow(link, callback=self.parse_item)
-                elif (b"text/plain" in content_type):
+                elif b"text/plain" in content_type:
+                    yield {
+                        "url": response.url,
+                        "title": "",
+                        "words:": self._get_words_from_text_response(response),
+                    }
+                elif self.include_js and (b"script" in content_type or b"application/json" in content_type or b"application/ld+json" in content_type):
                     yield {
                         "url": response.url,
                         "title": "",

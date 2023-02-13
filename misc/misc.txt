@@ -26,7 +26,7 @@ python3 -m http.server
 http://localhost:8000
 ```
 
-it tag -a v1.0.7 -m "Release"
+it tag -a v1.0.8 -m "Release"
 
 
 ## TODO
