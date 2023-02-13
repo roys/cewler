@@ -11,11 +11,13 @@ _CeWLeR_ was sort of originally inspired by the really nice tool [CeWL](https://
 ## Features
 - Generates custom wordlists by scraping words from web sites
 - A lot of options:
-  - Output so screen or file
+  - Output to screen or file
   - Can stay within subdomain, or visit sibling and child subdomains, or visit anything within the same top domain
   - Can stay within a certain depth of a website
   - Speed can be controlled
   - Word length and casing can be configured
+  - JavaScript and CSS can be included
+  - Crawled URLs can be output to file
   - ++
 - Using the excellent [Scrapy](https://scrapy.org) framework for scraping and using the beautiful [rich](https://github.com/Textualize/rich) library for terminal output
 
@@ -43,6 +45,14 @@ The default is to just visit exactly the same (sub)domain as specified.
 
 #### Visit same (sub)domain + any belonging child subdomains
 `cewler --output wordlist.txt -s children https://example.com`  
+
+#### Include JavaScript and/or CSS
+If you want you can include links from `<script>` and `<link>` tags, plus words from within JavaScript and CSS.  
+`cewler --output wordlist.txt --include-js --include-css https://example.com`  
+
+#### Output visited URLs to file
+It's also possible to store the crawled files to a file.
+`cewler --output wordlist.txt --output-urls urls.txt https://example.com`  
 
 #### Ninja trick 🥷
 If it just takes too long to crawl a site you can press `ctrl + c` once(!) and wait while the spider finishes the current requests and then whatever words have been found so far is stored to the output file.

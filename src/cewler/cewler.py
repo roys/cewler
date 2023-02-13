@@ -27,7 +27,7 @@ except ImportError:  # When running this file directly
 
 
 __author__ = "Roy Solberg"
-__version__ = "1.0.8"
+__version__ = "1.0.9"
 __program__ = "CeWLeR"
 __description__ = "Custom Word List generator Redefined"
 
@@ -153,7 +153,9 @@ def get_live_ui(args):
     nice_strategy += f", max depth {args.depth}"
     nice_strategy += f", {args.rate} reqs/s"
     nice_words = "Lowercase" if args.lowercase else "Mixed case"
-    nice_words += ", " + ("excl. numbers" if args.without_numbers else "incl. numbers")
+    nice_words += ", " + ("excl." if args.without_numbers else "incl.") + " numbers"
+    nice_words += ", incl. JS" if args.include_js else ""
+    nice_words += ", incl. CSS" if args.include_css else ""
     nice_words += f", min. {args.min_word_length} chars."
     nice_ua = "Default" if constants.DEFAULT_USER_AGENT == args.user_agent else "Custom"
     nice_ua += " (" + textwrap.shorten(args.user_agent, width=40, placeholder="...") + ")"

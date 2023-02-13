@@ -31,8 +31,5 @@ it tag -a v1.0.8 -m "Release"
 
 ## TODO
 - Table with strategies and domains
-- `--include-javascript`
-- `--include-comments`? (`<!-- HTML comment -->`)
-- `--include-css`?
 - `--include-emails`?
 - `--pipe`?
