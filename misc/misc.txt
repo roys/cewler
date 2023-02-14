@@ -26,10 +26,11 @@ python3 -m http.server
 http://localhost:8000
 ```
 
-it tag -a v1.0.8 -m "Release"
+git tag -a v1.0.8 -m "Release"
 
 
 ## TODO
 - Table with strategies and domains
 - `--include-emails`?
 - `--pipe`?
+- 

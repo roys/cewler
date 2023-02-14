@@ -4,5 +4,5 @@ XPATH_TEXT_INCLUDE_JAVASCRIPT = "//comment() | //text()[not (ancestor-or-self::s
 XPATH_TEXT_INCLUDE_CSS = "//comment() | //text()[not (ancestor-or-self::script)]"
 XPATH_TEXT_INCLUDE_JAVASCRIPT_AND_CSS = "//comment() | //text()"
 XPATH_COMMENT = "//comment()"
-CHARACTERS_TO_FILTER_AWAY = '[\(\),./"\"?!“”‘’´:\{\}\[\]«»\*…•‹≈=■◦☀️„|_~✓+<>@;]'
+CHARACTERS_TO_FILTER_AWAY = '[\(\),./"\"?!“”‘’´`:\{\}\[\]«»\*…•‹≈=■◦☀️„|_~✓+<>@;￼\\\\]|&&'
 CHARACTERS_ALLOWED_IN_WORDS_BUT_NOT_IN_START_OR_END = "'ˈ-–━—&"
