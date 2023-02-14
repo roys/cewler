@@ -90,6 +90,18 @@ options:
                         ignore words are numbers or contain numbers
 ```
 
+### Subdomain strategies
+
+Example URL to scan `https://sub.example.com`:
+
+|   | `-s exact`* | `-s children` | `-s all` |
+| --- | --- | --- | --- |
+| `sub.example.com` | ✅ | ✅ | ✅ |
+| `child.sub.example.com` | ❌ | ✅ | ✅ |
+| `sibling.example.com` | ❌ | ❌ | ✅ |
+| `example.com` | ❌ | ❌ | ✅ |
+\* Default strategy
+
 ### Digging into the code
 If you want to do some tweaking you yourself you can probably find what you want in [blob/main/src/constants.py](blob/main/src/constants.py) and [blob/main/src/spider.py](blob/main/src/spider.py)
 
