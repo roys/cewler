@@ -111,7 +111,7 @@ Example URL to scan `https://sub.example.com`:
 \* Default strategy
 
 ### Digging into the code
-If you want to do some tweaking you yourself you can probably find what you want in [blob/main/src/constants.py](blob/main/src/constants.py) and [blob/main/src/spider.py](blob/main/src/spider.py)
+If you want to do some tweaking you yourself you can probably find what you want in [src/constants.py](src/constants.py) and [src/spider.py](src/spider.py)
 
 ## Installation and upgrade
 ### Alternative 1 - installing from PyPI
