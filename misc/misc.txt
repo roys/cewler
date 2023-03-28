@@ -7,7 +7,7 @@ https://packaging.python.org/en/latest/tutorials/packaging-projects/
 python3 -m pip install --upgrade build
 python3 -m pip install --upgrade twine
 python3 -m build
-python3 -m twine upload --repository pypi dist/cewler-1.0.3*
+python3 -m twine upload --repository pypi dist/cewler-1.1.0*
 
 python3 -m pip install cewler --upgrade
 
@@ -26,10 +26,9 @@ python3 -m http.server
 http://localhost:8000
 ```
 
-git tag -a v1.0.8 -m "Release"
+git tag -a v1.1.0 -m "Release"
 
 
 ## TODO
-- `--include-emails`?
 - `--pipe`?
 - 
