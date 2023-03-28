@@ -16,8 +16,10 @@ _CeWLeR_ was sort of originally inspired by the really nice tool [CeWL](https://
   - Can stay within a certain depth of a website
   - Speed can be controlled
   - Word length and casing can be configured
+  - E-mails are scraped
   - JavaScript and CSS can be included
-  - Crawled URLs can be output to file
+  - Crawled URLs can be output to separate file
+  - Crawled e-mails can be output to separate file
   - ++
 - Using the excellent [Scrapy](https://scrapy.org) framework for scraping and using the beautiful [rich](https://github.com/Textualize/rich) library for terminal output
 
@@ -54,6 +56,10 @@ If you want you can include links from `<script>` and `<link>` tags, plus words 
 It's also possible to store the crawled files to a file.
 `cewler --output wordlist.txt --output-urls urls.txt https://example.com`  
 
+#### Output emails to file
+It's also possible to store the scraped e-mail to a separate file (they are always added to the wordlist).
+`cewler --output wordlist.txt --output-emails emails.txt https://example.com`  
+
 #### Ninja trick 🥷
 If it just takes too long to crawl a site you can press `ctrl + c` once(!) and wait while the spider finishes the current requests and then whatever words have been found so far is stored to the output file.
 
@@ -77,6 +83,8 @@ options:
   -m MIN_WORD_LENGTH, --min-word-length MIN_WORD_LENGTH
   -o OUTPUT, --output OUTPUT
                         file were to stream and store wordlist instead of screen (default: screen)
+  -oe OUTPUT_EMAILS, --output-emails OUTPUT_EMAILS
+                        file were to stream and store e-mail addresses found (they will always be outputted in the wordlist)
   -ou OUTPUT_URLS, --output-urls OUTPUT_URLS
                         file were to stream and store URLs visited (default: not outputted)
   -r RATE, --rate RATE  requests per second (default: 20)

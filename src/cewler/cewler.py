@@ -27,7 +27,7 @@ except ImportError:  # When running this file directly
 
 
 __author__ = "Roy Solberg"
-__version__ = "1.0.9"
+__version__ = "1.1.0"
 __program__ = "CeWLeR"
 __description__ = "Custom Word List generator Redefined"
 
@@ -49,6 +49,8 @@ def insert_dev_arguments():
         sys.argv.append("wordlist-dev.txt")
         sys.argv.append("--output-urls")
         sys.argv.append("urls-dev.txt")
+        sys.argv.append("--output-emails")
+        sys.argv.append("emails-dev.txt")
         sys.argv.append("--subdomain_strategy")
         sys.argv.append("all")
         # sys.argv.append("children")
@@ -79,6 +81,7 @@ def get_parsed_args_and_init_parser():
     parser.add_argument("-l", "--lowercase", action="store_true", help="lowercase all parsed words")
     parser.add_argument("-m", "--min-word-length", type=int, default=5)
     parser.add_argument("-o", "--output", help="file were to stream and store wordlist instead of screen (default: screen)")
+    parser.add_argument("-oe", "--output-emails", help="file were to stream and store e-mail addresses found (they will always be outputted in the wordlist)")
     parser.add_argument("-ou", "--output-urls", help="file were to stream and store URLs visited (default: not outputted)")
     parser.add_argument("-r", "--rate", type=int, default=20, help="requests per second (default: 20)")
     parser.add_argument("-s", "--subdomain_strategy", choices=["all", "children", "exact"], default="exact", help="allow crawling [all] domains, including children and siblings, only [exact] the same (sub)domain (default), or same domain and any belonging [children]")
@@ -88,6 +91,8 @@ def get_parsed_args_and_init_parser():
     parser.add_argument("-w", "--without-numbers", action="store_true", help="ignore words are numbers or contain numbers")
 
     args = parser.parse_args(args=None if sys.argv[1:] else ['--help'])
+    if "://" not in args.url:  # Missing scheme in request url - let try to help out the user by prefixing it with http
+        args.url = f"http://{args.url}"
     if args.stream and args.output is None:
         exit("cewler: error: Argument --stream cannot be used without a file specified with --output")
     return args
@@ -269,7 +274,7 @@ def cewler():
 
         with live:
             process = CrawlerProcess(get_scrapy_settings_and_init_logging(args.user_agent, args.depth, args.rate, args.subdomain_strategy))
-            process.crawl(spider.CewlerSpider, console=console, url=args.url, file_words=args.output, file_urls=args.output_urls, include_js=args.include_js, include_css=args.include_css, should_lowercase=args.lowercase,
+            process.crawl(spider.CewlerSpider, console=console, url=args.url, file_words=args.output, file_emails=args.output_emails, file_urls=args.output_urls, include_js=args.include_js, include_css=args.include_css, should_lowercase=args.lowercase,
                           without_numbers=args.without_numbers, min_word_length=args.min_word_length, verbose=args.verbose, stream_to_file=args.stream, spider_event_callback=on_spider_event)
             process.start()
         print("")

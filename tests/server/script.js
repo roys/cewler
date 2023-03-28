@@ -5,3 +5,4 @@ function scriptJsTesting() {
 document.addEventListener('DOMContentLoaded', function () {
     scriptJsTesting()
 }, false);
+const email = "Script1@example.com"

@@ -54,7 +54,7 @@ class AnyParentAndSisterAndSubdomainMiddleware(offsite.OffsiteMiddleware):
 class CewlerSpider(CrawlSpider):
     name = "CeWLeR"
 
-    def __init__(self, console, url, file_words=None, file_urls=None, include_js=False, include_css=False, should_lowercase=False, without_numbers=False, min_word_length=5, verbose=False, spider_event_callback=None, stream_to_file=False, *args, **kwargs):
+    def __init__(self, console, url, file_words=None, file_emails=None, file_urls=None, include_js=False, include_css=False, should_lowercase=False, without_numbers=False, min_word_length=5, verbose=False, spider_event_callback=None, stream_to_file=False, *args, **kwargs):
         self.console = console
         self.should_lowercase = should_lowercase
         self.without_numbers = without_numbers
@@ -63,6 +63,7 @@ class CewlerSpider(CrawlSpider):
         self.spider_event_callback = spider_event_callback
         self.stream_to_file = stream_to_file
         self.words_found = set()
+        self.emails_found = set()
         self.urls_parsed = set()
         self.visited_domains = set()
         self.exceptions = []
@@ -94,6 +95,7 @@ class CewlerSpider(CrawlSpider):
 
             self.allowed_domains = [self.get_allowed(url)]
             self.file_words = open(file_words, mode="w") if file_words is not None else None
+            self.file_emails = open(file_emails, mode="w") if file_emails is not None else None
             self.file_urls = open(file_urls, mode="w") if file_urls is not None else None
         except Exception:
             self.console.print_exception(show_locals=False)
@@ -146,6 +148,12 @@ class CewlerSpider(CrawlSpider):
                     self.file_words.write(word)
                     self.file_words.write("\n")
                 self.file_words.close()
+            if self.file_emails is not None:
+                self.last_status = "writing_to_file"
+                for email in sorted(self.emails_found):
+                    self.file_emails.write(email)
+                    self.file_emails.write("\n")
+                self.file_emails.close()
             if self.file_urls is not None:
                 self.last_status = "writing_to_file"
                 for url in sorted(self.urls_parsed):
@@ -155,9 +163,18 @@ class CewlerSpider(CrawlSpider):
         self.last_status = "spider_closed"
         self.send_spider_callback()
 
-    def _get_words_from_text(self, text):
+    def _get_words_and_emails_from_text(self, text):
         new_words = []
+        new_emails = []
         text = html.unescape(text)
+
+        email_list = re.findall(constants.REGEX_EMAIL, text)
+        for email in email_list:
+            if self.should_lowercase:
+                email = email.lower()
+            new_emails.append(email)
+            new_words.append(email)
+
         text = re.sub(constants.CHARACTERS_TO_FILTER_AWAY, " ", text)  # Filter characters
         text = re.sub("\s+", " ", text)  # Replace all spacing with one space
         if self.should_lowercase:
@@ -181,12 +198,13 @@ class CewlerSpider(CrawlSpider):
                         new_words.append(word)
                 else:
                     new_words.append(word)
-        return set(new_words)
+        return (set(new_words), set(new_emails))
 
     def _get_words_from_text_response(self, response):
         new_words = set()
+        new_emails = set()
         try:
-            new_words = self._get_words_from_text(response.text)
+            new_words, new_emails = self._get_words_and_emails_from_text(response.text)
             if len(new_words) > 0:
                 if self.file_words is not None and self.stream_to_file:
                     for word in new_words:
@@ -196,15 +214,27 @@ class CewlerSpider(CrawlSpider):
                     self.file_words.flush()
                 else:
                     self.words_found.update(new_words)
+            if len(new_emails) > 0:
+                if self.file_emails is not None and self.stream_to_file:
+                    for email in new_emails:
+                        if email not in self.emails_found:
+                            self.emails_found.add(email)
+                            self.file_emails.write(email + "\n")
+                    self.file_emails.flush()
+                else:
+                    self.emails_found.update(new_emails)
         except Exception as e:
             exit(e)
         return new_words
 
     def _get_words_from_html_response(self, response):
         new_words = set()
+        new_emails = set()
         try:
             for item in response.xpath(self.xpath):
-                new_words.update(self._get_words_from_text(item.get()))
+                words_and_emails_tuple = self._get_words_and_emails_from_text(item.get())
+                new_words.update(words_and_emails_tuple[0])
+                new_emails.update(words_and_emails_tuple[1])
             if len(new_words) > 0:
                 if self.file_words is not None and self.stream_to_file:
                     for word in new_words:
@@ -214,6 +244,15 @@ class CewlerSpider(CrawlSpider):
                     self.file_words.flush()
                 else:
                     self.words_found.update(new_words)
+            if len(new_emails) > 0:
+                if self.file_emails is not None and self.stream_to_file:
+                    for email in new_emails:
+                        if email not in self.emails_found:
+                            self.emails_found.add(email)
+                            self.file_emails.write(email + "\n")
+                    self.file_emails.flush()
+                else:
+                    self.emails_found.update(new_emails)
         except Exception as e:
             exit(e)
         return new_words
