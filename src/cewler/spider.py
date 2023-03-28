@@ -3,6 +3,7 @@ import re
 import scrapy
 import scrapy.exceptions
 import tld
+import urllib.parse
 from scrapy import signals
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spidermiddlewares import offsite
@@ -144,18 +145,21 @@ class CewlerSpider(CrawlSpider):
         if not self.stream_to_file:
             if self.file_words is not None:
                 self.last_status = "writing_to_file"
+                self.send_spider_callback()
                 for word in self.words_found:
                     self.file_words.write(word)
                     self.file_words.write("\n")
                 self.file_words.close()
             if self.file_emails is not None:
                 self.last_status = "writing_to_file"
+                self.send_spider_callback()
                 for email in sorted(self.emails_found):
                     self.file_emails.write(email)
                     self.file_emails.write("\n")
                 self.file_emails.close()
             if self.file_urls is not None:
                 self.last_status = "writing_to_file"
+                self.send_spider_callback()
                 for url in sorted(self.urls_parsed):
                     self.file_urls.write(url)
                     self.file_urls.write("\n")
@@ -167,6 +171,7 @@ class CewlerSpider(CrawlSpider):
         new_words = []
         new_emails = []
         text = html.unescape(text)
+        text = urllib.parse.unquote(text)
 
         email_list = re.findall(constants.REGEX_EMAIL, text)
         for email in email_list:

@@ -27,7 +27,7 @@ except ImportError:  # When running this file directly
 
 
 __author__ = "Roy Solberg"
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 __program__ = "CeWLeR"
 __description__ = "Custom Word List generator Redefined"
 
@@ -79,7 +79,7 @@ def get_parsed_args_and_init_parser():
     parser.add_argument("-css", "--include-css", action="store_true", help="include CSS from external files and <style> tags")
     parser.add_argument("-js", "--include-js", action="store_true", help="include JavaScript from external files and <script> tags")
     parser.add_argument("-l", "--lowercase", action="store_true", help="lowercase all parsed words")
-    parser.add_argument("-m", "--min-word-length", type=int, default=5)
+    parser.add_argument("-m", "--min-word-length", type=int, default=5, help="minimum word length to include (default: 5)")
     parser.add_argument("-o", "--output", help="file were to stream and store wordlist instead of screen (default: screen)")
     parser.add_argument("-oe", "--output-emails", help="file were to stream and store e-mail addresses found (they will always be outputted in the wordlist)")
     parser.add_argument("-ou", "--output-urls", help="file were to stream and store URLs visited (default: not outputted)")
