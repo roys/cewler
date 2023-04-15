@@ -3,10 +3,14 @@ _CeWLeR_ crawls from a specified URL and collects words to create a custom wordl
 
 It's a great tool for security testers and bug bounty hunters. The lists can be used for password cracking, subdomain enumeration, directory and file brute forcing, API endpoint discovery, etc. It's good to have an additional target specific wordlist that is different than what everybody else use.
 
-_CeWLeR_ was sort of originally inspired by the really nice tool [CeWL](https://github.com/digininja/CeWL). I had some challenges with _CeWL_ on a site I wanted a wordlist from, but without any Ruby experience I didn't know how to contribute and work around it. So instead I created a custom word list generator in Python to get the job done.
+_CeWLeR_ was sort of originally inspired by the really nice tool [CeWL](https://github.com/digininja/CeWL). I had some challenges with _CeWL_ on a site I wanted a wordlist from, but without any Ruby experience I didn't know how to contribute or work around it. So instead I created a custom wordlist generator in Python to get the job done.
+
+---
 
 ## At a glance
 <img src="https://github.com/roys/cewler/blob/main/misc/demo.gif?raw=true" width="800" />
+
+---
 
 ## Features
 - Generates custom wordlists by scraping words from web sites
@@ -16,12 +20,13 @@ _CeWLeR_ was sort of originally inspired by the really nice tool [CeWL](https://
   - Can stay within a certain depth of a website
   - Speed can be controlled
   - Word length and casing can be configured
-  - E-mails are scraped
   - JavaScript and CSS can be included
   - Crawled URLs can be output to separate file
-  - Crawled e-mails can be output to separate file
+  - Scraped e-mail addresses can also be output to separate file
   - ++
 - Using the excellent [Scrapy](https://scrapy.org) framework for scraping and using the beautiful [rich](https://github.com/Textualize/rich) library for terminal output
+
+---
 
 ## Commands and options
 ### Quick examples
@@ -68,7 +73,7 @@ If it just takes too long to crawl a site you can press `ctrl + c` once(!) and w
 cewler -h
 usage: cewler [-h] [-d DEPTH] [-js] [-l] [-m MIN_WORD_LENGTH] [-o OUTPUT] [-ou OUTPUT_URLS] [-r RATE] [-s {all,children,exact}] [--stream] [-u USER_AGENT] [-v] [-w] url
 
-Custom Word List generator Redefined
+CeWLeR - Custom Word List generator Redefined
 
 positional arguments:
   url                   URL to start crawling from
@@ -113,6 +118,8 @@ Example URL to scan `https://sub.example.com`:
 ### Digging into the code
 If you want to do some tweaking you yourself you can probably find what you want in [src/cewler/constants.py](src/cewler/constants.py) and [src/cewler/spider.py](src/cewler/spider.py)
 
+---
+
 ## Installation and upgrade
 ### Alternative 1 - installing from PyPI
 Package homepage: https://pypi.org/project/cewler/
@@ -121,7 +128,6 @@ Package homepage: https://pypi.org/project/cewler/
 
 #### Upgrade
 `python3 -m pip install cewler --upgrade`
-
 
 ### Alternative 2 - installing from GitHub
 #### 1. Clone repository
@@ -141,9 +147,12 @@ cewler -h
 #### Upgrade
 `git pull`
 
+---
 
 ## Pronunciation
 _CeWLeR_ is pronounced _"cooler"_.
+
+---
 
 ## License
 [Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](LICENSE)

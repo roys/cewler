@@ -31,4 +31,4 @@ git tag -a v1.1.1 -m "Release"
 
 ## TODO
 - `--pipe`?
-- Support application/xml, text/csv, text/markdown?
+- Support application/xml, text/xml, text/csv, text/markdown?
