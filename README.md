@@ -126,7 +126,10 @@ Package homepage: https://pypi.org/project/cewler/
 `git clone https://github.com/roys/cewler.git --depth 1`
 
 #### 2. Install dependencies
-`python3 -m pip install -r requirements.txt`
+```
+cd cewler
+python3 -m pip install -r requirements.txt
+```
 
 #### 3. Shortcut on Un*x based system (optional)
 ```
