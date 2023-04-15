@@ -116,7 +116,7 @@ class CewlerSpider(CrawlSpider):
         return spider
 
     def get_allowed(self, url):
-        #print("get_allowed", url)
+        # print("get_allowed", url)
         return re.findall("^(?:https?:\/\/)?(?:[^@\/\n]+@)?([^:\/\n]+)", url)[0]
 
     def send_spider_callback(self):
@@ -262,6 +262,11 @@ class CewlerSpider(CrawlSpider):
             exit(e)
         return new_words
 
+    def is_supported_text_content_type(self, content_type):
+        if "text/plain" in content_type:
+            return True
+        return False
+
     def parse_item(self, response):
         try:
             if self.stream_to_file and self.file_urls is not None:
@@ -276,8 +281,8 @@ class CewlerSpider(CrawlSpider):
                 tld_obj = tld.get_tld(response.url, as_object=True, fail_silently=True)
                 if tld_obj is not None:
                     self.visited_domains.add(tld_obj.subdomain + "." + tld_obj.domain + "." + tld_obj.tld)
-                content_type = headers[b"content-type"][0]
-                if (b"text/html" in content_type):
+                content_type = headers[b"content-type"][0].decode().lower()
+                if "text/html" in content_type:
                     yield {
                         "url": response.url,
                         "title": response.css("title::text").get(),
@@ -287,39 +292,37 @@ class CewlerSpider(CrawlSpider):
                         inside_comment = item.get().replace("<!--", "").replace("-->", "")
                         for link in self.link_extractor.extract_links(scrapy.http.TextResponse(url=response.url, body=bytes(inside_comment, encoding="utf-8"))):
                             yield response.follow(link, callback=self.parse_item)
-                elif b"text/plain" in content_type:
+                elif self.is_supported_text_content_type(content_type):
                     yield {
                         "url": response.url,
                         "title": "",
                         "words:": self._get_words_from_text_response(response),
                     }
-                elif self.include_js and (b"script" in content_type or b"application/json" in content_type or b"application/ld+json" in content_type):
+                elif self.include_js and ("script" in content_type or "application/json" in content_type or "application/ld+json" in content_type):
                     yield {
                         "url": response.url,
                         "title": "",
                         "words:": self._get_words_from_text_response(response),
                     }
-                elif self.include_css and (b"text/css" in content_type):
+                elif self.include_css and ("text/css" in content_type):
                     yield {
                         "url": response.url,
                         "title": "",
                         "words:": self._get_words_from_text_response(response),
                     }
                 else:
-                    try:
-                        self.unsupported_content_types.add(content_type.decode("utf-8"))
-                    except UnicodeDecodeError:
-                        self.unsupported_content_types.add(str(content_type))
+                    self.unsupported_content_types.add(content_type)
                     yield {
                         "url": response.url,
                         "title": "",
                         "error": f"Unsupported Content-Type [{b'content-type' in headers.keys()}]"
                     }
             else:
+                self.unsupported_content_types.add("Missing Content-Type header")
                 yield {
                     "url": response.url,
                     "title": "",
-                    "error": f"Skipping because of Content-Type [{b'content-type' in headers.keys()}]"
+                    "error": f"Skipping because of missing Content-Type"
                 }
         except Exception as e:
             self.exceptions.append(e)
