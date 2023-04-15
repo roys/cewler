@@ -5,12 +5,8 @@ It's a great tool for security testers and bug bounty hunters. The lists can be 
 
 _CeWLeR_ was sort of originally inspired by the really nice tool [CeWL](https://github.com/digininja/CeWL). I had some challenges with _CeWL_ on a site I wanted a wordlist from, but without any Ruby experience I didn't know how to contribute or work around it. So instead I created a custom wordlist generator in Python to get the job done.
 
----
-
 ## At a glance
 <img src="https://github.com/roys/cewler/blob/main/misc/demo.gif?raw=true" width="800" />
-
----
 
 ## Features
 - Generates custom wordlists by scraping words from web sites
@@ -25,8 +21,6 @@ _CeWLeR_ was sort of originally inspired by the really nice tool [CeWL](https://
   - Scraped e-mail addresses can also be output to separate file
   - ++
 - Using the excellent [Scrapy](https://scrapy.org) framework for scraping and using the beautiful [rich](https://github.com/Textualize/rich) library for terminal output
-
----
 
 ## Commands and options
 ### Quick examples
@@ -61,8 +55,8 @@ If you want you can include links from `<script>` and `<link>` tags, plus words 
 It's also possible to store the crawled files to a file.
 `cewler --output wordlist.txt --output-urls urls.txt https://example.com`  
 
-#### Output emails to file
-It's also possible to store the scraped e-mail to a separate file (they are always added to the wordlist).
+#### Output e-mails to file
+It's also possible to store the scraped e-mail addresses to a separate file (they are always added to the wordlist).
 `cewler --output wordlist.txt --output-emails emails.txt https://example.com`  
 
 #### Ninja trick 🥷
@@ -118,8 +112,6 @@ Example URL to scan `https://sub.example.com`:
 ### Digging into the code
 If you want to do some tweaking you yourself you can probably find what you want in [src/cewler/constants.py](src/cewler/constants.py) and [src/cewler/spider.py](src/cewler/spider.py)
 
----
-
 ## Installation and upgrade
 ### Alternative 1 - installing from PyPI
 Package homepage: https://pypi.org/project/cewler/
@@ -147,12 +139,8 @@ cewler -h
 #### Upgrade
 `git pull`
 
----
-
 ## Pronunciation
 _CeWLeR_ is pronounced _"cooler"_.
-
----
 
 ## License
 [Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](LICENSE)
