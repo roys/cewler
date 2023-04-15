@@ -7,7 +7,7 @@ List of changes, newest changes first.
 ## Version 1.1.1
  \* Improved parsing of text by HTML unquoting it (and not only HTML unescaping named and numeric character references).
 ## Version 1.1.0
- \+ Added support for all kinds of meta-tags in the form `<meta name="some-key" content="content-to-be-scraped">`  
+ \+ Added support for all kinds of meta-tags in the form `<meta name="some-key" content="content-to-be-scraped">`.  
  \+ Added support for scraping e-mail addresses. They will always be added to the wordlist, but they can also be stored in separate file using `cewler --output-emails emails.txt https://example.com`.  
  \+ Adding `http://` to start URL if there's no `://` in the URL.  
 ## Version 1.0.9

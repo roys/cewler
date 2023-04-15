@@ -40,39 +40,8 @@ is_verbose_output = False
 last_event_received = None
 
 
-def insert_dev_arguments():
-    """ Used mainly to easily access options during development """
-    if len(sys.argv) == 1:
-        # sys.argv.append("https://roysolberg.com")
-        sys.argv.append("http://localhost:8000")
-        sys.argv.append("-o")
-        sys.argv.append("wordlist-dev.txt")
-        sys.argv.append("--output-urls")
-        sys.argv.append("urls-dev.txt")
-        sys.argv.append("--output-emails")
-        sys.argv.append("emails-dev.txt")
-        sys.argv.append("--subdomain_strategy")
-        sys.argv.append("all")
-        # sys.argv.append("children")
-        # sys.argv.append("exact")
-        sys.argv.append("--depth")
-        sys.argv.append("0")
-        sys.argv.append("--include-js")
-        sys.argv.append("--include-css")
-        # sys.argv.append("--min-word-length")
-        # sys.argv.append("5")
-        # sys.argv.append("--stream")
-        # sys.argv.append("--lowercase")
-        # sys.argv.append("--user-agent")
-        # sys.argv.append(f"{__program__} v.{__version__} - {__description__}")
-        # sys.argv.append("--rate")
-        # sys.argv.append("1")
-        # sys.argv.append("--without-numbers")
-        sys.argv.append("--verbose")
-
-
 def get_parsed_args_and_init_parser():
-    parser = argparse.ArgumentParser(prog=__program__.lower(), allow_abbrev=False, description=__description__, epilog="Visit https://github.com/roys/cewler for more information")
+    parser = argparse.ArgumentParser(prog=__program__.lower(), allow_abbrev=False, description=f"{__program__} v.{__version__} - {__description__}", epilog="Visit https://github.com/roys/cewler for more information")
 
     parser.add_argument("url", help="URL to start crawling from")
     parser.add_argument("-d", "--depth", type=int, default=2, help="directory path depth to crawl, 0 for unlimited (default: 2)")
@@ -267,7 +236,6 @@ def cewler():
     global console
     console = Console()
     try:
-        # insert_dev_arguments()  # Used for development
         args = get_parsed_args_and_init_parser()
         global live
         live = get_live_ui(args)
