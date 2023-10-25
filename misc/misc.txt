@@ -16,6 +16,7 @@ python3 -m venv env
 source env/bin/activate
 which python
 python3 -m pip install cewler --upgrade
+cewler
 deactivate
 ```
 
