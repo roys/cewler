@@ -4,6 +4,9 @@ Changelog for _cewler_.
 List of changes, newest changes first.
 ('+' = new feature, '-' = removed feature, '*' = changed feature)
 
+## Version 1.1.2
+ \* Fix for [#1](https://github.com/roys/cewler/issues/1): Specified `Twisted` version needed for `Scrapy`.
+ \* Cleaned up code structure a bit.
 ## Version 1.1.1
  \* Improved parsing of text by HTML unquoting it (and not only HTML unescaping named and numeric character references).
 ## Version 1.1.0
