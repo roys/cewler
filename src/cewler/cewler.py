@@ -247,6 +247,10 @@ class Cewler:
             self.console.print_exception(show_locals=False)
 
 
-if __name__ == "__main__":
+def main():
     cewler = Cewler()
     cewler.run()
+
+
+if __name__ == "__main__":
+    main()
