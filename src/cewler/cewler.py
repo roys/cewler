@@ -27,7 +27,7 @@ except ImportError:  # When running this file directly
 
 
 __author__ = "Roy Solberg"
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 __program__ = "CeWLeR"
 __description__ = "Custom Word List generator Redefined"
 
