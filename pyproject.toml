@@ -18,7 +18,8 @@ requires-python = ">=3.7"
 dependencies = [
     "rich==13.3.1",
     "Scrapy==2.8.0",
-    "tld==0.12.7"
+    "tld==0.12.7",
+    "Twisted==22.10.0"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -34,7 +35,7 @@ classifiers = [
 ]
 
 [project.scripts]
-cewler = "cewler.cewler:cewler"
+cewler = "cewler.cewler:Cewler.run"
 
 [project.urls]
 "Homepage" = "https://github.com/roys/cewler"
