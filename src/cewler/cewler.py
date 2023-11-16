@@ -45,7 +45,7 @@ class Cewler:
     def get_parsed_args_and_init_parser(self):
         parser = argparse.ArgumentParser(prog=__program__.lower(), allow_abbrev=False, description=f"{__program__} v.{__version__} - {__description__}", epilog="Visit https://github.com/roys/cewler for more information")
 
-        parser.add_argument("url", help="URL to start crawling from")
+        parser.add_argument("url", nargs='?', default=None, help="URL to start crawling from")
         parser.add_argument("-d", "--depth", type=int, default=2, help="directory path depth to crawl, 0 for unlimited (default: 2)")
         parser.add_argument("-css", "--include-css", action="store_true", help="include CSS from external files and <style> tags")
         parser.add_argument("-js", "--include-js", action="store_true", help="include JavaScript from external files and <script> tags")
@@ -62,11 +62,26 @@ class Cewler:
         parser.add_argument("-w", "--without-numbers", action="store_true", help="ignore words are numbers or contain numbers")
 
         args = parser.parse_args(args=None if sys.argv[1:] else ['--help'])
-        if "://" not in args.url:  # Missing scheme in request url - let try to help out the user by prefixing it with http
-            args.url = f"http://{args.url}"
+        if args.url is None or args.url == '-':  # Should read from stdin
+            args.urls = [line.strip() for line in sys.stdin if line.strip()]
+        else:
+            args.urls = [args.url]
+        args.urls = [self.get_clean_url(url) for url in args.urls]
+
         if args.stream and args.output is None:
             exit("cewler: error: Argument --stream cannot be used without a file specified with --output")
+
         return args
+
+    def get_clean_url(self, url):
+        url = url.strip()
+        if "://" not in url:  # Missing scheme in request url - let try to help out the user by prefixing it with http
+            url = f"http://{url}"
+        if "?" in url:
+            url = url[:url.index("?")]
+        if url.endswith("/"):
+            url = url[:-1]
+        return url
 
     def get_scrapy_settings_and_init_logging(self, user_agent, depth_limit, reqs_per_sec, subdomain_strategy):
         """ Sets up scrapy logging and returns necessary settings object """
@@ -115,6 +130,7 @@ class Cewler:
         return "%s %s" % (s, size_name[i])
 
     def get_live_ui(self, args):
+        nice_urls = ", ".join(args.urls)
         if args.subdomain_strategy == "all":
             nice_strategy = "Any and all subdomains of top domain"
         elif args.subdomain_strategy == "children":
@@ -134,7 +150,7 @@ class Cewler:
 
         self.is_verbose_output = args.verbose
         static_ui_lines = []
-        static_ui_lines.append(["URL: ", f"[bold underline blue]{args.url}"])
+        static_ui_lines.append(["URL: ", f"[bold underline blue]{nice_urls}"])
         static_ui_lines.append(["Strategy: ", f"[magenta]{nice_strategy}"])
         static_ui_lines.append(["Words: ", f"[magenta]{nice_words}"])
         static_ui_lines.append(["User-Agent: ", f"[magenta]{nice_ua}"])
@@ -233,7 +249,7 @@ class Cewler:
 
             with self.live:
                 process = CrawlerProcess(self.get_scrapy_settings_and_init_logging(args.user_agent, args.depth, args.rate, args.subdomain_strategy))
-                process.crawl(spider.CewlerSpider, console=self.console, url=args.url, file_words=args.output, file_emails=args.output_emails, file_urls=args.output_urls, include_js=args.include_js, include_css=args.include_css, should_lowercase=args.lowercase,
+                process.crawl(spider.CewlerSpider, console=self.console, urls=args.urls, file_words=args.output, file_emails=args.output_emails, file_urls=args.output_urls, include_js=args.include_js, include_css=args.include_css, should_lowercase=args.lowercase,
                               without_numbers=args.without_numbers, min_word_length=args.min_word_length, verbose=args.verbose, stream_to_file=args.stream, spider_event_callback=self.on_spider_event)
                 process.start()
             print("")

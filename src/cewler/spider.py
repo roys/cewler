@@ -55,7 +55,7 @@ class AnyParentAndSisterAndSubdomainMiddleware(offsite.OffsiteMiddleware):
 class CewlerSpider(CrawlSpider):
     name = "CeWLeR"
 
-    def __init__(self, console, url, file_words=None, file_emails=None, file_urls=None, include_js=False, include_css=False, should_lowercase=False, without_numbers=False, min_word_length=5, verbose=False, spider_event_callback=None, stream_to_file=False, *args, **kwargs):
+    def __init__(self, console, urls, file_words=None, file_emails=None, file_urls=None, include_js=False, include_css=False, should_lowercase=False, without_numbers=False, min_word_length=5, verbose=False, spider_event_callback=None, stream_to_file=False, *args, **kwargs):
         self.console = console
         self.should_lowercase = should_lowercase
         self.without_numbers = without_numbers
@@ -92,9 +92,9 @@ class CewlerSpider(CrawlSpider):
         try:
             self.rules = (Rule(self.link_extractor, follow=True, callback="parse_item"),)
             super(CewlerSpider, self).__init__(*args, **kwargs)
-            self.start_urls = [url]
+            self.start_urls = urls
 
-            self.allowed_domains = [self.get_allowed(url)]
+            self.allowed_domains = self.get_allowed_domains(urls)
             self.file_words = open(file_words, mode="w") if file_words is not None else None
             self.file_emails = open(file_emails, mode="w") if file_emails is not None else None
             self.file_urls = open(file_urls, mode="w") if file_urls is not None else None
@@ -115,9 +115,11 @@ class CewlerSpider(CrawlSpider):
         crawler.signals.connect(spider.engine_stopped, signal=signals.engine_stopped)
         return spider
 
-    def get_allowed(self, url):
-        # print("get_allowed", url)
-        return re.findall("^(?:https?:\/\/)?(?:[^@\/\n]+@)?([^:\/\n]+)", url)[0]
+    def get_allowed_domains(self, urls):
+        # print("get_allowed", urls)
+        domains = [re.findall("^(?:https?:\/\/)?(?:[^@\/\n]+@)?([^:\/\n]+)", url)[0] for url in urls if re.findall("^(?:https?:\/\/)?(?:[^@\/\n]+@)?([^:\/\n]+)", url)]
+        unique_domains = list(set(domains))
+        return unique_domains
 
     def send_spider_callback(self):
         if self.spider_event_callback is not None:
