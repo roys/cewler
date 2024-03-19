@@ -151,5 +151,12 @@ cewler -h
 ## Pronunciation
 _CeWLeR_ is pronounced _"cooler"_.
 
+## Contributors
+A huge thank you to everyone who has contributed to making CeWLeR better! Your contributions, big and small, make a significant difference.
+
+Contributions of any kind are welcome and recognized. From bug reports to coding, documentation to design, every effort is appreciated:
+ - [Chris Dale](https://github.com/ChrisAD) - for testing, bug reporting and fixing
+ - [Mathies Svarrer-Lanthén](https://github.com/seihtam) - for adding support for PDF extraction
+
 ## License
 [Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](LICENSE)
