@@ -4,6 +4,8 @@ Changelog for _cewler_.
 List of changes, newest changes first.
 ('+' = new feature, '-' = removed feature, '*' = changed feature)
 
+## Version 1.2.0
+ \+ Added support for extracting text from PDF files. Example command: `cewler --include-pdf https://example.com`.  
 ## Version 1.1.2
  \* Fix for [#1](https://github.com/roys/cewler/issues/1): Specified `Twisted` version needed for `Scrapy`.  
  \* Cleaned up code structure a bit.
