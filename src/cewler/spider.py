@@ -4,11 +4,13 @@ import scrapy
 import scrapy.exceptions
 import tld
 import urllib.parse
+import io
 from scrapy import signals
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spidermiddlewares import offsite
 from scrapy.spiders import CrawlSpider, Rule
 import scrapy.core.downloader.handlers.http
+from pypdf import PdfReader
 
 try:
     from . import constants
@@ -55,7 +57,7 @@ class AnyParentAndSisterAndSubdomainMiddleware(offsite.OffsiteMiddleware):
 class CewlerSpider(CrawlSpider):
     name = "CeWLeR"
 
-    def __init__(self, console, url, file_words=None, file_emails=None, file_urls=None, include_js=False, include_css=False, should_lowercase=False, without_numbers=False, min_word_length=5, verbose=False, spider_event_callback=None, stream_to_file=False, *args, **kwargs):
+    def __init__(self, console, url, file_words=None, file_emails=None, file_urls=None, include_js=False, include_css=False, include_pdf=False, should_lowercase=False, without_numbers=False, min_word_length=5, verbose=False, spider_event_callback=None, stream_to_file=False, *args, **kwargs):
         self.console = console
         self.should_lowercase = should_lowercase
         self.without_numbers = without_numbers
@@ -73,21 +75,23 @@ class CewlerSpider(CrawlSpider):
         self.last_status = "init"
         self.include_js = include_js
         self.include_css = include_css
-        if self.include_js and self.include_css:
-            deny_extensions = scrapy.linkextractors.IGNORED_EXTENSIONS
+        self.include_pdf = include_pdf
+        deny_extensions = scrapy.linkextractors.IGNORED_EXTENSIONS
+        if self.include_pdf:
+            deny_extensions.remove("pdf")
+        if self.include_css:
             deny_extensions.remove("css")
+        if self.include_js and self.include_css:
             self.link_extractor = LinkExtractor(tags=("a", "area", "script", "link"), attrs=("href", "src"), deny_extensions=deny_extensions)
             self.xpath = constants.XPATH_TEXT_INCLUDE_JAVASCRIPT_AND_CSS
         elif self.include_js:
-            self.link_extractor = LinkExtractor(tags=("a", "area", "script"), attrs=("href", "src"))
+            self.link_extractor = LinkExtractor(tags=("a", "area", "script"), attrs=("href", "src"), deny_extensions=deny_extensions)
             self.xpath = constants.XPATH_TEXT_INCLUDE_JAVASCRIPT
         elif self.include_css:
-            deny_extensions = scrapy.linkextractors.IGNORED_EXTENSIONS
-            deny_extensions.remove("css")
             self.link_extractor = LinkExtractor(tags=("a", "area", "link"), attrs=("href", "src"), deny_extensions=deny_extensions)
             self.xpath = constants.XPATH_TEXT_INCLUDE_CSS
         else:
-            self.link_extractor = LinkExtractor()
+            self.link_extractor = LinkExtractor(deny_extensions=deny_extensions)
             self.xpath = constants.XPATH_TEXT
         try:
             self.rules = (Rule(self.link_extractor, follow=True, callback="parse_item"),)
@@ -205,11 +209,11 @@ class CewlerSpider(CrawlSpider):
                     new_words.append(word)
         return (set(new_words), set(new_emails))
 
-    def _get_words_from_text_response(self, response):
+    def _get_words_from_text_response(self, text):
         new_words = set()
         new_emails = set()
         try:
-            new_words, new_emails = self._get_words_and_emails_from_text(response.text)
+            new_words, new_emails = self._get_words_and_emails_from_text(text)
             if len(new_words) > 0:
                 if self.file_words is not None and self.stream_to_file:
                     for word in new_words:
@@ -262,6 +266,17 @@ class CewlerSpider(CrawlSpider):
             exit(e)
         return new_words
 
+    def _get_words_from_pdf(self, pdf_body):
+        pdf_text = ""
+        try:
+            pdf_reader = PdfReader(io.BytesIO(pdf_body))
+            for page in pdf_reader.pages:
+                pdf_text += page.extract_text()
+        except Exception:
+            pass
+
+        return pdf_text
+
     def is_supported_text_content_type(self, content_type):
         if "text/plain" in content_type:
             return True
@@ -296,19 +311,26 @@ class CewlerSpider(CrawlSpider):
                     yield {
                         "url": response.url,
                         "title": "",
-                        "words:": self._get_words_from_text_response(response),
+                        "words:": self._get_words_from_text_response(response.text),
                     }
                 elif self.include_js and ("script" in content_type or "application/json" in content_type or "application/ld+json" in content_type):
                     yield {
                         "url": response.url,
                         "title": "",
-                        "words:": self._get_words_from_text_response(response),
+                        "words:": self._get_words_from_text_response(response.text),
                     }
                 elif self.include_css and ("text/css" in content_type):
                     yield {
                         "url": response.url,
                         "title": "",
-                        "words:": self._get_words_from_text_response(response),
+                        "words:": self._get_words_from_text_response(response.text),
+                    }
+                elif self.include_pdf and ("application/pdf" in content_type):
+                    pdf_text = self._get_words_from_pdf(response.body)
+                    yield {
+                        "url": response.url,
+                        "title": "",
+                        "words:": self._get_words_from_text_response(pdf_text),
                     }
                 else:
                     self.unsupported_content_types.add(content_type)
