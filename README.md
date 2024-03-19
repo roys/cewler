@@ -51,6 +51,10 @@ The default is to just visit exactly the same (sub)domain as specified.
 If you want you can include links from `<script>` and `<link>` tags, plus words from within JavaScript and CSS.  
 `cewler --output wordlist.txt --include-js --include-css https://example.com`  
 
+#### Include PDF files
+It's easy to extract text from PDF files as well.    
+`cewler --output wordlist.txt --include-pdf https://example.com`  
+
 #### Output visited URLs to file
 It's also possible to store the crawled files to a file.
 `cewler --output wordlist.txt --output-urls urls.txt https://example.com`  
@@ -78,6 +82,7 @@ options:
                         directory path depth to crawl, 0 for unlimited (default: 2)
   -css, --include-css   include CSS from external files and <style> tags
   -js, --include-js     include JavaScript from external files and <script> tags
+  -pdf, --include-pdf   include text from PDF files
   -l, --lowercase       lowercase all parsed words
   -m MIN_WORD_LENGTH, --min-word-length MIN_WORD_LENGTH
   -o OUTPUT, --output OUTPUT
