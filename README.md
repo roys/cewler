@@ -17,6 +17,7 @@ _CeWLeR_ was sort of originally inspired by the really nice tool [CeWL](https://
   - Speed can be controlled
   - Word length and casing can be configured
   - JavaScript and CSS can be included
+  - Text can be extracted from PDF files (using [pypdf](https://pypi.org/project/pypdf/))
   - Crawled URLs can be output to separate file
   - Scraped e-mail addresses can also be output to separate file
   - ++
