@@ -271,10 +271,9 @@ class CewlerSpider(CrawlSpider):
         try:
             pdf_reader = PdfReader(io.BytesIO(pdf_body))
             for page in pdf_reader.pages:
-                pdf_text += page.extract_text()
+                pdf_text += " " + page.extract_text()
         except Exception:
             pass
-
         return pdf_text
 
     def is_supported_text_content_type(self, content_type):
