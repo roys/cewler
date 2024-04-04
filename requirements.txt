@@ -4,4 +4,3 @@ rich==13.3.1
 Scrapy==2.8.0
 tld==0.12.7
 Twisted==22.10.0
-constants==2023.2.0
