@@ -16,10 +16,12 @@ keywords = ["custom wordlist", "wordlist generator", "bug bounty hunting", "secu
 readme = "README.md"
 requires-python = ">=3.7"
 dependencies = [
+    "pypdf==4.0.1",
     "rich==13.3.1",
     "Scrapy==2.8.0",
     "tld==0.12.7",
-    "Twisted==22.10.0"
+    "Twisted==22.10.0",
+    "constants==2023.2.0"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
