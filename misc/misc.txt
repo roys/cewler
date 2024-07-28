@@ -28,6 +28,7 @@ http://localhost:8000
 ```
 
 git tag -a v1.2.0 -m "Release"
+git push --tags
 
 
 ## TODO
