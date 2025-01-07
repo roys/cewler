@@ -154,7 +154,7 @@ To run CeWLer with docker you first build the docker container:
 `docker build . -t cewler`
 
 After the container finish building you can run CeWLer like this to store the output in the current folder:
-`docker run -v $(pwd):/app cewler --output /app/wordlist.txt --depth 1 https://blog.roysolberg.com`
+`docker run -v "$(pwd):/app" cewler --output /app/wordlist.txt --depth 1 https://blog.roysolberg.com`
 
 ## Pronunciation
 _CeWLeR_ is pronounced _"cooler"_.
