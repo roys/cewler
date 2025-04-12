@@ -26,11 +26,11 @@ _CeWLeR_ was sort of originally inspired by the really nice tool [CeWL](https://
 ## Commands and options
 ### Quick examples
 #### Output to file
-Will output to file unless a file is specified.  
+Will output to screen unless a file is specified.  
 `cewler --output wordlist.txt https://example.com`  
 
 #### Control speed and depth
-The rate is specified in requests per second. Please play nicely and don't don't break any rules.  
+The rate is specified in requests per second. Please play nicely and don't break any rules.  
 `cewler --output wordlist.txt --rate 5 --depth 2 https://example.com`  
 
 #### Change User-Agent header
@@ -161,7 +161,7 @@ cewler -h
 To run CeWLeR with docker you first build the docker container:  
 `docker build . -t cewler`
 
-After the container finish building you can run CeWLeR like this to store the output in the current folder:  
+After the container finishes building you can run CeWLeR like this to store the output in the current folder:  
 `docker run -v "$(pwd):/app" cewler --output /app/wordlist.txt --depth 1 https://blog.roysolberg.com`
 
 ## Pronunciation
