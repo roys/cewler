@@ -157,12 +157,11 @@ cewler -h
 #### Upgrade
 `git pull`
 
-
 ## Docker
-To run CeWLer with docker you first build the docker container:
+To run CeWLeR with docker you first build the docker container:
 `docker build . -t cewler`
 
-After the container finish building you can run CeWLer like this to store the output in the current folder:
+After the container finish building you can run CeWLeR like this to store the output in the current folder:
 `docker run -v "$(pwd):/app" cewler --output /app/wordlist.txt --depth 1 https://blog.roysolberg.com`
 
 ## Pronunciation
@@ -174,6 +173,7 @@ A huge thank you to everyone who has contributed to making CeWLeR better! Your c
 Contributions of any kind are welcome and recognized. From bug reports to coding, documentation to design, every effort is appreciated:
  - [Chris Dale](https://github.com/ChrisAD) - for testing, bug reporting and fixing
  - [Mathies Svarrer-Lanthén](https://github.com/seihtam) - for adding support for PDF extraction
+ - [webhak](https://github.com/webhak) - for adding Docker support
 
 ## License
 [Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](LICENSE)
