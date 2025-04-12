@@ -7,7 +7,7 @@ import urllib.parse
 import io
 from scrapy import signals
 from scrapy.linkextractors import LinkExtractor
-from scrapy.spidermiddlewares import offsite
+from scrapy.downloadermiddlewares import offsite
 from scrapy.spiders import CrawlSpider, Rule
 import scrapy.core.downloader.handlers.http
 from pypdf import PdfReader
@@ -26,7 +26,7 @@ class OnlyExactSameDomainSpiderMiddleware(offsite.OffsiteMiddleware):
     def get_host_regex(self, spider):
         regex = super().get_host_regex(spider)
         # Remove optional .* (any subdomains) from regex
-        regex = regex.pattern.replace("(.*\.)?", "", 1)
+        regex = regex.pattern.replace(r"(.*\.)?", "", 1)
         return re.compile(regex)
 
 
@@ -76,11 +76,13 @@ class CewlerSpider(CrawlSpider):
         self.include_js = include_js
         self.include_css = include_css
         self.include_pdf = include_pdf
-        deny_extensions = scrapy.linkextractors.IGNORED_EXTENSIONS
+        deny_extensions = list(scrapy.linkextractors.IGNORED_EXTENSIONS)
         if self.include_pdf:
             deny_extensions.remove("pdf")
         if self.include_css:
             deny_extensions.remove("css")
+        if self.include_js:
+            deny_extensions.remove("js")
         if self.include_js and self.include_css:
             self.link_extractor = LinkExtractor(tags=("a", "area", "frame", "iframe", "script", "link"), attrs=("href", "src"), deny_extensions=deny_extensions)
             self.xpath = constants.XPATH_TEXT_INCLUDE_JAVASCRIPT_AND_CSS
@@ -121,7 +123,7 @@ class CewlerSpider(CrawlSpider):
 
     def get_allowed(self, url):
         # print("get_allowed", url)
-        return re.findall("^(?:https?:\/\/)?(?:[^@\/\n]+@)?([^:\/\n]+)", url)[0]
+        return re.findall(r"^(?:https?:\/\/)?(?:[^@\/\n]+@)?([^:\/\n]+)", url)[0]
 
     def send_spider_callback(self):
         if self.spider_event_callback is not None:
@@ -185,7 +187,7 @@ class CewlerSpider(CrawlSpider):
             new_words.append(email)
 
         text = re.sub(constants.CHARACTERS_TO_FILTER_AWAY, " ", text)  # Filter characters
-        text = re.sub("\s+", " ", text)  # Replace all spacing with one space
+        text = re.sub(r"\s+", " ", text)  # Replace all spacing with one space
         if self.should_lowercase:
             text = text.lower()
         for word in text.split(" "):

@@ -27,7 +27,7 @@ except ImportError:  # When running this file directly
 
 
 __author__ = "Roy Solberg"
-__version__ = "1.2.0"
+__version__ = "1.3.0.DEV"
 __program__ = "CeWLeR"
 __description__ = "Custom Word List generator Redefined"
 
@@ -82,13 +82,12 @@ class Cewler:
             offsite_class = f"{spider_package}spider.OnlyExactSameDomainSpiderMiddleware"
 
         middleware_settings = {
-            "scrapy.spidermiddlewares.offsite.OffsiteMiddleware": None,
+            "scrapy.downloadermiddlewares.offsite.OffsiteMiddleware": None,
             offsite_class: 1337
         }
 
         return {
             # https://docs.scrapy.org/en/latest/topics/settings.html
-            "REQUEST_FINGERPRINTER_IMPLEMENTATION": "2.7",
             "USER_AGENT": user_agent,
             "DEPTH_LIMIT": depth_limit,
             "DOWNLOAD_DELAY": 1/reqs_per_sec,
