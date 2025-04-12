@@ -16,11 +16,11 @@ keywords = ["custom wordlist", "wordlist generator", "bug bounty hunting", "secu
 readme = "README.md"
 requires-python = ">=3.7"
 dependencies = [
-    "pypdf==4.0.1",
-    "rich==13.3.1",
-    "Scrapy==2.8.0",
-    "tld==0.12.7",
-    "Twisted==22.10.0"
+    "pypdf==5.4.0",
+    "rich==14.0.0",
+    "Scrapy==2.12.0",
+    "tld==0.13",
+    "Twisted==24.11.0"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -28,7 +28,7 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Security",
     "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Framework :: Scrapy",
     "Intended Audience :: Information Technology",
