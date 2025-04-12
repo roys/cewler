@@ -129,7 +129,10 @@ Package homepage: https://pypi.org/project/cewler/
 
 ### Alternative 2 - installing from GitHub
 #### 1. Clone repository
-`git clone https://github.com/roys/cewler.git --depth 1`
+```
+git clone https://github.com/roys/cewler.git --depth 1
+cd cewler
+```
 
 #### 2. Create virtual environment (optional, but recommended)
 This keeps dependencies isolated and avoids affecting your system Python.
@@ -140,7 +143,6 @@ source venv/bin/activate
 
 #### 3. Install dependencies
 ```
-cd cewler
 python3 -m pip install -r requirements.txt
 ```
 
