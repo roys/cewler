@@ -4,6 +4,8 @@ Changelog for _cewler_.
 List of changes, newest changes first.
 ('+' = new feature, '-' = removed feature, '*' = changed feature)
 
+## Version 1.3.1
+ \+ Added support for application/json (always enabled, no flags)
 ## Version 1.3.0
  \+ Added support for `<iframe>` and `<frame>`.
  \* Changed default User-Agent to `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36`.

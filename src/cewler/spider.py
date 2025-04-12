@@ -93,7 +93,7 @@ class CewlerSpider(CrawlSpider):
             self.link_extractor = LinkExtractor(tags=("a", "area", "frame", "iframe", "link"), attrs=("href", "src"), deny_extensions=deny_extensions)
             self.xpath = constants.XPATH_TEXT_INCLUDE_CSS
         else:
-            self.link_extractor = LinkExtractor(tags=("a", "area", "frame", "iframe"), attrs=("href", "src"),deny_extensions=deny_extensions)
+            self.link_extractor = LinkExtractor(tags=("a", "area", "frame", "iframe"), attrs=("href", "src"), deny_extensions=deny_extensions)
             self.xpath = constants.XPATH_TEXT
         try:
             self.rules = (Rule(self.link_extractor, follow=True, callback="parse_item"),)
@@ -279,9 +279,7 @@ class CewlerSpider(CrawlSpider):
         return pdf_text
 
     def is_supported_text_content_type(self, content_type):
-        if "text/plain" in content_type:
-            return True
-        return False
+        return content_type.startswith(constants.SUPPORTED_TEXT_CONTENT_TYPES)
 
     def parse_item(self, response):
         try:
