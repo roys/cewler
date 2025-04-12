@@ -1,4 +1,4 @@
-DEFAULT_USER_AGENT                    = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
+DEFAULT_USER_AGENT                    = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
 XPATH_TEXT                            = "//comment() | //a[starts-with(@href, 'mailto')] | //meta[@name]/@content | //text()[not (ancestor-or-self::script or ancestor-or-self::style)]"
 XPATH_TEXT_INCLUDE_JAVASCRIPT         = "//comment() | //a[starts-with(@href, 'mailto')] | //meta[@name]/@content | //text()[not (ancestor-or-self::style)]"
 XPATH_TEXT_INCLUDE_CSS                = "//comment() | //a[starts-with(@href, 'mailto')] | //meta[@name]/@content | //text()[not (ancestor-or-self::script)]"
