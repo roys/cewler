@@ -158,10 +158,10 @@ cewler -h
 `git pull`
 
 ## Docker
-To run CeWLeR with docker you first build the docker container:
+To run CeWLeR with docker you first build the docker container:  
 `docker build . -t cewler`
 
-After the container finish building you can run CeWLeR like this to store the output in the current folder:
+After the container finish building you can run CeWLeR like this to store the output in the current folder:  
 `docker run -v "$(pwd):/app" cewler --output /app/wordlist.txt --depth 1 https://blog.roysolberg.com`
 
 ## Pronunciation
