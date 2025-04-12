@@ -6,7 +6,9 @@ List of changes, newest changes first.
 
 ## Version 1.3.0
  \+ Added support for `<iframe>` and `<frame>`.
- \* Changed default User-Agent to `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36`
+ \* Changed default User-Agent to `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36`.
+ \* Fixed warnings in Python 3.12+. 
+ \* Library upgrades and belonging adjustments.
 ## Version 1.2.0
  \+ Added support for extracting text from PDF files. Example command: `cewler --include-pdf https://example.com`.  
 ## Version 1.1.2
