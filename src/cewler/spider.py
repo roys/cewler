@@ -82,16 +82,16 @@ class CewlerSpider(CrawlSpider):
         if self.include_css:
             deny_extensions.remove("css")
         if self.include_js and self.include_css:
-            self.link_extractor = LinkExtractor(tags=("a", "area", "script", "link"), attrs=("href", "src"), deny_extensions=deny_extensions)
+            self.link_extractor = LinkExtractor(tags=("a", "area", "frame", "iframe", "script", "link"), attrs=("href", "src"), deny_extensions=deny_extensions)
             self.xpath = constants.XPATH_TEXT_INCLUDE_JAVASCRIPT_AND_CSS
         elif self.include_js:
-            self.link_extractor = LinkExtractor(tags=("a", "area", "script"), attrs=("href", "src"), deny_extensions=deny_extensions)
+            self.link_extractor = LinkExtractor(tags=("a", "area", "frame", "iframe", "script"), attrs=("href", "src"), deny_extensions=deny_extensions)
             self.xpath = constants.XPATH_TEXT_INCLUDE_JAVASCRIPT
         elif self.include_css:
-            self.link_extractor = LinkExtractor(tags=("a", "area", "link"), attrs=("href", "src"), deny_extensions=deny_extensions)
+            self.link_extractor = LinkExtractor(tags=("a", "area", "frame", "iframe", "link"), attrs=("href", "src"), deny_extensions=deny_extensions)
             self.xpath = constants.XPATH_TEXT_INCLUDE_CSS
         else:
-            self.link_extractor = LinkExtractor(deny_extensions=deny_extensions)
+            self.link_extractor = LinkExtractor(tags=("a", "area", "frame", "iframe"), attrs=("href", "src"),deny_extensions=deny_extensions)
             self.xpath = constants.XPATH_TEXT
         try:
             self.rules = (Rule(self.link_extractor, follow=True, callback="parse_item"),)
