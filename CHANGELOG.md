@@ -5,19 +5,19 @@ List of changes, newest changes first.
 ('+' = new feature, '-' = removed feature, '*' = changed feature)
 
 ## Version 1.3.1
- \+ Added support for application/json (always enabled, no flags)
+ \+ Added support for application/json (always enabled, no flags)  
 ## Version 1.3.0
- \+ Added support for `<iframe>` and `<frame>`.
- \* Changed default User-Agent to `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36`.
- \* Fixed warnings in Python 3.12+. 
- \* Library upgrades and belonging adjustments.
+ \+ Added support for `<iframe>` and `<frame>`.  
+ \* Changed default User-Agent to `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36`.  
+ \* Fixed warnings in Python 3.12+.  
+ \* Library upgrades and belonging adjustments.  
 ## Version 1.2.0
  \+ Added support for extracting text from PDF files. Example command: `cewler --include-pdf https://example.com`.  
 ## Version 1.1.2
  \* Fix for [#1](https://github.com/roys/cewler/issues/1): Specified `Twisted` version needed for `Scrapy`.  
  \* Cleaned up code structure a bit.
 ## Version 1.1.1
- \* Improved parsing of text by HTML unquoting it (and not only HTML unescaping named and numeric character references).
+ \* Improved parsing of text by HTML unquoting it (and not only HTML unescaping named and numeric character references).  
 ## Version 1.1.0
  \+ Added support for all kinds of meta-tags in the form `<meta name="some-key" content="content-to-be-scraped">`.  
  \+ Added support for scraping e-mail addresses. They will always be added to the wordlist, but they can also be stored in separate file using `cewler --output-emails emails.txt https://example.com`.  
