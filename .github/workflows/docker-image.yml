@@ -23,8 +23,8 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build . --file Dockerfile --tag ghcr.io/itsmebrille/cewler:latest
+        docker build . --file Dockerfile --tag ghcr.io/roys/cewler:latest
 
     - name: Push Docker image
       run: |
-        docker push ghcr.io/itsmebrille/cewler:latest
+        docker push ghcr.io/roys/cewler:latest

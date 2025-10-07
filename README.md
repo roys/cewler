@@ -11,7 +11,7 @@ _CeWLeR_ was sort of originally inspired by the really nice tool [CeWL](https://
 ## Docker
 The fastest way to get it running is to use Docker:
 ```bash
-docker run --rm -v "$(pwd)":/w ghcr.io/itsmebrille/cewler:latest --output /w/words.txt https://blog.roysolberg.com
+docker run --rm -v "$(pwd)":/w ghcr.io/roys/cewler:latest --output /w/words.txt https://blog.roysolberg.com
 ```
 
 ## Features
