@@ -178,6 +178,7 @@ class CewlerSpider(CrawlSpider):
         new_emails = []
         text = html.unescape(text)
         text = urllib.parse.unquote(text)
+        text = re.sub(constants.CONTROL_CHARACTERS_TO_FILTER_AWAY, "", text)  # Remove control characters
 
         email_list = re.findall(constants.REGEX_EMAIL, text)
         for email in email_list:
