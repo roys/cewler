@@ -11,9 +11,9 @@ authors = [
 description = "Custom Word List generator Redefined"
 keywords = ["custom wordlist", "wordlist generator", "bug bounty hunting", "security testing", "pen testing", "crawler", "spider"]
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 dependencies = [
-    "pypdf~=5.4.0",
+    "pypdf~=6.1.1",
     "rich~=14.0.0",
     "Scrapy~=2.12.0",
     "tld~=0.13",
