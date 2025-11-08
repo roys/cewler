@@ -24,11 +24,35 @@ deactivate
 
 ## Test contents
 ```
-cd tests/sever
+cd tests/server
 python3 -m http.server
 http://localhost:8000
 ```
 
+(venv) ➜  cewler git:(main) ✗ pwd
+/Users/roy/dev/git/cewler
+(venv) ➜  cewler git:(main) ✗ python3 misc/dev-cewler.py 
+Running command: python3 src/cewler/cewler.py  http://localhost:8000 -o wordlist-dev.txt --output-urls urls-dev.txt --output-emails emails-dev.txt --subdomain_strategy all --depth 0 --include-js --include-css --verbose
+
+
+╭─────────────────────────── CeWLeR v.1.3.1 - Custom Word List generator Redefined ───────────────────────────╮
+│                                                                                                             │
+│   URL:           http://localhost:8000                                                                      │
+│   Strategy:      Any and all subdomains of top domain, max depth 0, 20 reqs/s                               │
+│   Words:         Mixed case, incl. numbers, incl. JS, incl. CSS, min. 5 chars.                              │
+│   User-Agent:    Default (Mozilla/5.0 (Windows NT 10.0; Win64;...)                                          │
+│   Output:        wordlist-dev.txt                                                                           │
+│   Status:        Spider engine stopped                                                                      │
+│   Time elapsed:  00:01                                                                                      │
+│   Requests:      15/15                                                                                      │
+│   Data received: 10.78 KB                                                                                   │
+│   Unsupported:   application/octet-stream                                                                   │
+│   Words found:   106                                                                                        │
+│                                                                                                             │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+## Release tagging
 git tag -a v1.3.1 -m "Release"
 git push --tags
 
