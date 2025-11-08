@@ -13,6 +13,7 @@ List of changes, newest changes first.
  \* Stopped specifying `Twisted` version now that `Scrapy` is updated.  
  \* Changed default User-Agent to `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36`.  
  \* Improved special character filter.
+ \+ Started filtering out emojis and symbols.
 ## Version 1.3.1
  \+ Added support for application/json (always enabled, no flags)  
 ## Version 1.3.0
