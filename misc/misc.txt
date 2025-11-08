@@ -54,7 +54,7 @@ Running command: python3 src/cewler/cewler.py  http://localhost:8000 -o wordlist
 
 
 ## Release tagging
-git tag -a v1.3.1 -m "Release"
+git tag -a v1.4.0 -m "Release"
 git push --tags
 
 
