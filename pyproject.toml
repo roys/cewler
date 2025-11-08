@@ -16,8 +16,7 @@ dependencies = [
     "pypdf~=6.1.1",
     "rich~=14.1.0",
     "Scrapy~=2.13.3",
-    "tld~=0.13",
-    "Twisted~=25.5.0"
+    "tld~=0.13"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
