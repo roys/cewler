@@ -179,6 +179,7 @@ class CewlerSpider(CrawlSpider):
         text = html.unescape(text)
         text = urllib.parse.unquote(text)
         text = re.sub(constants.CONTROL_CHARACTERS_TO_FILTER_AWAY, "", text)  # Remove control characters
+        text = re.sub(constants.EMOJI_RANGES_TO_FILTER_AWAY, " ", text)  # Remove emojis
 
         email_list = re.findall(constants.REGEX_EMAIL, text)
         for email in email_list:
@@ -187,7 +188,7 @@ class CewlerSpider(CrawlSpider):
             new_emails.append(email)
             new_words.append(email)
 
-        text = re.sub(constants.CHARACTERS_TO_FILTER_AWAY, " ", text)  # Filter characters
+        text = re.sub(constants.CHARACTERS_TO_FILTER_AWAY, " ", text)  # Filter characters (incl. @, so need this after email extraction)
         text = re.sub(r"\s+", " ", text)  # Replace all spacing with one space
         if self.should_lowercase:
             text = text.lower()
