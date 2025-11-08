@@ -45,9 +45,9 @@ Running command: python3 src/cewler/cewler.py  http://localhost:8000 -o wordlist
 │   Status:        Spider engine stopped                                                                      │
 │   Time elapsed:  00:01                                                                                      │
 │   Requests:      15/15                                                                                      │
-│   Data received: 10.78 KB                                                                                   │
+│   Data received: 10.86 KB                                                                                   │
 │   Unsupported:   application/octet-stream                                                                   │
-│   Words found:   106                                                                                        │
+│   Words found:   110                                                                                        │
 │                                                                                                             │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 

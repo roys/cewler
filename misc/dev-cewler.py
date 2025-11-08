@@ -13,6 +13,7 @@ http://localhost:8000
 --depth 0
 --include-js
 --include-css
+--include-pdf
 #--min-word-length
 #5
 #--stream
