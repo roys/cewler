@@ -4,6 +4,15 @@ Changelog for _cewler_.
 List of changes, newest changes first.
 ('+' = new feature, '-' = removed feature, '*' = changed feature)
 
+## Version 1.4.0
+ \* Breaking change: Python requirement >=3.7 → >=3.9.  
+ \* Removed requirements.txt (using pyproject.toml exclusively).  
+ \* Fix for [#15](https://github.com/roys/cewler/issues/15): Avoiding certain control characters.  
+ \* Fix for [#20](https://github.com/roys/cewler/issues/20): Specifying UTF-8 for file storage to avoid Windows Unicode encoding error with non-ASCII characters.  
+ \* Library upgrades and changed compatible release operator.  
+ \* Stopped specifying `Twisted` version now that `Scrapy` is updated.  
+ \* Changed default User-Agent to `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36`.  
+ \* Improved special character filter.
 ## Version 1.3.1
  \+ Added support for application/json (always enabled, no flags)  
 ## Version 1.3.0
