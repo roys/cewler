@@ -101,9 +101,9 @@ class CewlerSpider(CrawlSpider):
             self.start_urls = [url]
 
             self.allowed_domains = [self.get_allowed(url)]
-            self.file_words = open(file_words, mode="w") if file_words is not None else None
-            self.file_emails = open(file_emails, mode="w") if file_emails is not None else None
-            self.file_urls = open(file_urls, mode="w") if file_urls is not None else None
+            self.file_words = open(file_words, mode="w", encoding="utf-8") if file_words is not None else None
+            self.file_emails = open(file_emails, mode="w", encoding="utf-8") if file_emails is not None else None
+            self.file_urls = open(file_urls, mode="w", encoding="utf-8") if file_urls is not None else None
         except Exception:
             self.console.print_exception(show_locals=False)
             raise scrapy.exceptions.CloseSpider()
