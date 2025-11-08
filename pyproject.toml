@@ -15,7 +15,7 @@ requires-python = ">=3.9"
 dependencies = [
     "pypdf~=6.1.1",
     "rich~=14.0.0",
-    "Scrapy~=2.12.0",
+    "Scrapy~=2.13.3",
     "tld~=0.13",
     "Twisted~=24.11.0"
 ]

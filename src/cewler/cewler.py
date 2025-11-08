@@ -91,10 +91,10 @@ class Cewler:
             "USER_AGENT": user_agent,
             "DEPTH_LIMIT": depth_limit,
             "DOWNLOAD_DELAY": 1/reqs_per_sec,
+            "CONCURRENT_REQUESTS_PER_DOMAIN": 8,  # Maintain Scrapy 2.12 default (2.13+ changed to 1)
             "SPIDER_MIDDLEWARES": middleware_settings,
             "HTTPERROR_ALLOW_ALL": True
             # "CONCURRENT_REQUESTS": 16
-            # "CONCURRENT_REQUESTS_PER_DOMAIN": 8
             # "CONCURRENT_REQUESTS_PER_IP": 0
             # "CONCURRENT_REQUESTS": 16
         }
