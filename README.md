@@ -97,7 +97,7 @@ options:
                         allow crawling [all] domains, including children and siblings, only [exact] the same (sub)domain (default), or same domain and any belonging [children]
   --stream              writes to file after each request (may produce duplicates because of threading) (default: false)
   -u USER_AGENT, --user-agent USER_AGENT
-                        User-Agent header to send (default: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36)
+                        User-Agent header to send (default: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36)
   -v, --verbose         A bit more detailed output
   -w, --without-numbers
                         ignore words are numbers or contain numbers
