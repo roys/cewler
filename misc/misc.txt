@@ -35,19 +35,20 @@ http://localhost:8000
 Running command: python3 src/cewler/cewler.py  http://localhost:8000 -o wordlist-dev.txt --output-urls urls-dev.txt --output-emails emails-dev.txt --subdomain_strategy all --depth 0 --include-js --include-css --verbose
 
 
+
 ╭─────────────────────────── CeWLeR v.1.3.1 - Custom Word List generator Redefined ───────────────────────────╮
 │                                                                                                             │
 │   URL:           http://localhost:8000                                                                      │
 │   Strategy:      Any and all subdomains of top domain, max depth 0, 20 reqs/s                               │
 │   Words:         Mixed case, incl. numbers, incl. JS, incl. CSS, min. 5 chars.                              │
 │   User-Agent:    Default (Mozilla/5.0 (Windows NT 10.0; Win64;...)                                          │
-│   Output:        wordlist-dev.txt                                                                           │
+│   Output:        tests/results/wordlist-test.txt                                                            │
 │   Status:        Spider engine stopped                                                                      │
 │   Time elapsed:  00:01                                                                                      │
-│   Requests:      15/15                                                                                      │
-│   Data received: 10.86 KB                                                                                   │
+│   Requests:      16/16                                                                                      │
+│   Data received: 23.04 KB                                                                                   │
 │   Unsupported:   application/octet-stream                                                                   │
-│   Words found:   110                                                                                        │
+│   Words found:   113                                                                                        │
 │                                                                                                             │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
