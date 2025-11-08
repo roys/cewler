@@ -11,6 +11,7 @@ authors = [
 description = "Custom Word List generator Redefined"
 keywords = ["custom wordlist", "wordlist generator", "bug bounty hunting", "security testing", "pen testing", "crawler", "spider"]
 readme = "README.md"
+license = "CC-BY-NC-4.0"
 requires-python = ">=3.9"
 dependencies = [
     "pypdf~=6.1.1",
@@ -20,7 +21,6 @@ dependencies = [
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: Other/Proprietary License",
     "Operating System :: OS Independent",
     "Topic :: Security",
     "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
