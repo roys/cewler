@@ -141,18 +141,12 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-#### 3. Install dependencies
+#### 3. Install cewler in editable mode
 ```
-python3 -m pip install -r requirements.txt
+python3 -m pip install -e .
 ```
 
-#### 4. Shortcut on Un*x based system (optional)
-```
-cd src/cewler
-chmod +x cewler.py
-ln -s $(pwd)/cewler.py /usr/local/bin/cewler
-cewler -h
-```
+This installs cewler and all its dependencies, creating the `cewler` command that you can run from anywhere (while the venv is active). Any changes you make to the source code will be immediately reflected when you run the command.
 
 #### Upgrade
 `git pull`
