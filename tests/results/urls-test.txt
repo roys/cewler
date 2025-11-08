@@ -1,0 +1,16 @@
+http://localhost:8000
+http://localhost:8000/
+http://localhost:8000/200.html
+http://localhost:8000/404.html
+http://localhost:8000/broken_html.html
+http://localhost:8000/email_addresses.html
+http://localhost:8000/head_and_metadata.html
+http://localhost:8000/html_comments.html
+http://localhost:8000/html_comments2.html
+http://localhost:8000/image
+http://localhost:8000/json.json
+http://localhost:8000/odd_chars.html
+http://localhost:8000/pdf.pdf
+http://localhost:8000/script.js
+http://localhost:8000/styles.css
+http://localhost:8000/text.txt

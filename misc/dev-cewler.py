@@ -6,9 +6,9 @@ import os
 args = """
 #roysolberg.com
 http://localhost:8000
--o wordlist-dev.txt
---output-urls urls-dev.txt
---output-emails emails-dev.txt
+-o tests/results/wordlist-test.txt
+--output-urls tests/results/urls-test.txt
+--output-emails tests/results/emails-test.txt
 --subdomain_strategy all
 --depth 0
 --include-js
