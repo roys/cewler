@@ -73,6 +73,7 @@ class Cewler:
         """ Sets up scrapy logging and returns necessary settings object """
         logging.getLogger("scrapy").setLevel(logging.ERROR)
         logging.getLogger("scrapy").propagate = False
+        logging.getLogger("asyncio").setLevel(logging.WARNING)  # Suppress asyncio DEBUG logs (new in Scrapy 2.13)
 
         if subdomain_strategy == "all":
             offsite_class = f"{spider_package}spider.AnyParentAndSisterAndSubdomainMiddleware"
