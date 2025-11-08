@@ -9,6 +9,7 @@ EXAMPLE
 EmailAddresses1
 EmailAddresses2
 Error
+Hawaiʻi
 HeadDescriptionContents
 HeadKeywordsContents
 HeadTitle
@@ -48,6 +49,9 @@ Oddchars2
 Oddchars3
 Oddchars4
 Oddchars5
+Oddchars6
+Oddchars7
+Oddchars8
 Paragraph
 PdfLink
 PdfText1
@@ -111,3 +115,4 @@ scriptJsTesting
 stylesCssClass
 testLogicalAnd
 whitesmoke
+ʻohana
