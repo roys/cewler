@@ -14,11 +14,13 @@ from pypdf import PdfReader
 
 try:
     from . import constants
+    from .config import CewlerConfig
 except ImportError:  # When running this file directly
     import os
     import sys
     sys.path.insert(0, os.path.abspath('.'))
     import constants
+    from config import CewlerConfig
 
 
 class OnlyExactSameDomainSpiderMiddleware(offsite.OffsiteMiddleware):
@@ -57,14 +59,15 @@ class AnyParentAndSisterAndSubdomainMiddleware(offsite.OffsiteMiddleware):
 class CewlerSpider(CrawlSpider):
     name = "CeWLeR"
 
-    def __init__(self, console, url, file_words=None, file_emails=None, file_urls=None, include_js=False, include_css=False, include_pdf=False, should_lowercase=False, without_numbers=False, min_word_length=5, verbose=False, spider_event_callback=None, stream_to_file=False, *args, **kwargs):
+    def __init__(self, console, config: CewlerConfig, spider_event_callback=None, *args, **kwargs):
         self.console = console
-        self.should_lowercase = should_lowercase
-        self.without_numbers = without_numbers
-        self.min_word_length = min_word_length
-        self.verbose = verbose
+        self.config = config
+        self.should_lowercase = config.lowercase
+        self.without_numbers = config.without_numbers
+        self.min_word_length = config.min_word_length
+        self.verbose = config.verbose
         self.spider_event_callback = spider_event_callback
-        self.stream_to_file = stream_to_file
+        self.stream_to_file = config.stream
         self.words_found = set()
         self.emails_found = set()
         self.urls_parsed = set()
@@ -73,9 +76,9 @@ class CewlerSpider(CrawlSpider):
         self.unsupported_content_types = set()
         self.log_lines = []
         self.last_status = "init"
-        self.include_js = include_js
-        self.include_css = include_css
-        self.include_pdf = include_pdf
+        self.include_js = config.include_js
+        self.include_css = config.include_css
+        self.include_pdf = config.include_pdf
         deny_extensions = list(scrapy.linkextractors.IGNORED_EXTENSIONS)
         if self.include_pdf:
             deny_extensions.remove("pdf")
@@ -98,12 +101,12 @@ class CewlerSpider(CrawlSpider):
         try:
             self.rules = (Rule(self.link_extractor, follow=True, callback="parse_item"),)
             super(CewlerSpider, self).__init__(*args, **kwargs)
-            self.start_urls = [url]
+            self.start_urls = [config.url]
 
-            self.allowed_domains = [self.get_allowed(url)]
-            self.file_words = open(file_words, mode="w", encoding="utf-8") if file_words is not None else None
-            self.file_emails = open(file_emails, mode="w", encoding="utf-8") if file_emails is not None else None
-            self.file_urls = open(file_urls, mode="w", encoding="utf-8") if file_urls is not None else None
+            self.allowed_domains = [self.get_allowed(config.url)]
+            self.file_words = open(config.output, mode="w", encoding="utf-8") if config.output is not None else None
+            self.file_emails = open(config.output_emails, mode="w", encoding="utf-8") if config.output_emails is not None else None
+            self.file_urls = open(config.output_urls, mode="w", encoding="utf-8") if config.output_urls is not None else None
         except Exception:
             self.console.print_exception(show_locals=False)
             raise scrapy.exceptions.CloseSpider()

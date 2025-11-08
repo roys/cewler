@@ -18,11 +18,13 @@ from scrapy.crawler import CrawlerProcess
 try:
     from . import constants
     from . import spider
+    from .config import CewlerConfig
     spider_package = "cewler."
 except ImportError:  # When running this file directly
     sys.path.insert(0, os.path.abspath('.'))
     import constants
     import spider
+    from config import CewlerConfig
     spider_package = ""
 
 
@@ -69,15 +71,15 @@ class Cewler:
             exit("cewler: error: Argument --stream cannot be used without a file specified with --output")
         return args
 
-    def get_scrapy_settings_and_init_logging(self, user_agent, depth_limit, reqs_per_sec, subdomain_strategy):
+    def get_scrapy_settings_and_init_logging(self, config: CewlerConfig):
         """ Sets up scrapy logging and returns necessary settings object """
         logging.getLogger("scrapy").setLevel(logging.ERROR)
         logging.getLogger("scrapy").propagate = False
         logging.getLogger("asyncio").setLevel(logging.WARNING)  # Suppress asyncio DEBUG logs (new in Scrapy 2.13)
 
-        if subdomain_strategy == "all":
+        if config.subdomain_strategy == "all":
             offsite_class = f"{spider_package}spider.AnyParentAndSisterAndSubdomainMiddleware"
-        elif subdomain_strategy == "children":
+        elif config.subdomain_strategy == "children":
             offsite_class = f"{spider_package}spider.OnlyChildrenSubdomainAndSameDomainSpiderMiddleware"
         else:  # "exact"
             offsite_class = f"{spider_package}spider.OnlyExactSameDomainSpiderMiddleware"
@@ -89,9 +91,9 @@ class Cewler:
 
         return {
             # https://docs.scrapy.org/en/latest/topics/settings.html
-            "USER_AGENT": user_agent,
-            "DEPTH_LIMIT": depth_limit,
-            "DOWNLOAD_DELAY": 1/reqs_per_sec,
+            "USER_AGENT": config.user_agent,
+            "DEPTH_LIMIT": config.depth,
+            "DOWNLOAD_DELAY": 1/config.rate,
             "CONCURRENT_REQUESTS_PER_DOMAIN": 8,  # Maintain Scrapy 2.12 default (2.13+ changed to 1)
             "SPIDER_MIDDLEWARES": middleware_settings,
             "HTTPERROR_ALLOW_ALL": True
@@ -115,27 +117,27 @@ class Cewler:
         s = round(bytes / p, 2)
         return "%s %s" % (s, size_name[i])
 
-    def get_live_ui(self, args):
-        if args.subdomain_strategy == "all":
+    def get_live_ui(self, config: CewlerConfig):
+        if config.subdomain_strategy == "all":
             nice_strategy = "Any and all subdomains of top domain"
-        elif args.subdomain_strategy == "children":
+        elif config.subdomain_strategy == "children":
             nice_strategy = "Same domain + any child subdomains"
         else:  # "exact"
             nice_strategy = "Exact same domain"
-        nice_strategy += f", max depth {args.depth}"
-        nice_strategy += f", {args.rate} reqs/s"
-        nice_words = "Lowercase" if args.lowercase else "Mixed case"
-        nice_words += ", " + ("excl." if args.without_numbers else "incl.") + " numbers"
-        nice_words += ", incl. JS" if args.include_js else ""
-        nice_words += ", incl. CSS" if args.include_css else ""
-        nice_words += f", min. {args.min_word_length} chars."
-        nice_ua = "Default" if constants.DEFAULT_USER_AGENT == args.user_agent else "Custom"
-        nice_ua += " (" + textwrap.shorten(args.user_agent, width=40, placeholder="...") + ")"
-        nice_output = "Screen only" if args.output is None else args.output
+        nice_strategy += f", max depth {config.depth}"
+        nice_strategy += f", {config.rate} reqs/s"
+        nice_words = "Lowercase" if config.lowercase else "Mixed case"
+        nice_words += ", " + ("excl." if config.without_numbers else "incl.") + " numbers"
+        nice_words += ", incl. JS" if config.include_js else ""
+        nice_words += ", incl. CSS" if config.include_css else ""
+        nice_words += f", min. {config.min_word_length} chars."
+        nice_ua = "Default" if constants.DEFAULT_USER_AGENT == config.user_agent else "Custom"
+        nice_ua += " (" + textwrap.shorten(config.user_agent, width=40, placeholder="...") + ")"
+        nice_output = "Screen only" if config.output is None else config.output
 
-        self.is_verbose_output = args.verbose
+        self.is_verbose_output = config.verbose
         static_ui_lines = []
-        static_ui_lines.append(["URL: ", f"[bold underline blue]{args.url}"])
+        static_ui_lines.append(["URL: ", f"[bold underline blue]{config.url}"])
         static_ui_lines.append(["Strategy: ", f"[magenta]{nice_strategy}"])
         static_ui_lines.append(["Words: ", f"[magenta]{nice_words}"])
         static_ui_lines.append(["User-Agent: ", f"[magenta]{nice_ua}"])
@@ -230,16 +232,36 @@ class Cewler:
         self.start_time = time.time()
         try:
             args = self.get_parsed_args_and_init_parser()
-            self.live = self.get_live_ui(args)
+
+            # Create config object from args
+            config = CewlerConfig(
+                url=args.url,
+                user_agent=args.user_agent,
+                depth=args.depth,
+                rate=args.rate,
+                subdomain_strategy=args.subdomain_strategy,
+                min_word_length=args.min_word_length,
+                include_js=args.include_js,
+                include_css=args.include_css,
+                include_pdf=args.include_pdf,
+                lowercase=args.lowercase,
+                without_numbers=args.without_numbers,
+                verbose=args.verbose,
+                output=args.output,
+                output_emails=args.output_emails,
+                output_urls=args.output_urls,
+                stream=args.stream
+            )
+
+            self.live = self.get_live_ui(config)
 
             with self.live:
-                process = CrawlerProcess(self.get_scrapy_settings_and_init_logging(args.user_agent, args.depth, args.rate, args.subdomain_strategy))
-                process.crawl(spider.CewlerSpider, console=self.console, url=args.url, file_words=args.output, file_emails=args.output_emails, file_urls=args.output_urls, include_js=args.include_js, include_css=args.include_css, include_pdf=args.include_pdf,
-                              should_lowercase=args.lowercase, without_numbers=args.without_numbers, min_word_length=args.min_word_length, verbose=args.verbose, stream_to_file=args.stream, spider_event_callback=self.on_spider_event)
+                process = CrawlerProcess(self.get_scrapy_settings_and_init_logging(config))
+                process.crawl(spider.CewlerSpider, console=self.console, config=config, spider_event_callback=self.on_spider_event)
                 process.start()
             print("")
 
-            if args.output is None:  # Should output to screen
+            if config.output is None:  # Should output to screen
                 if self.last_event_received is not None and "words" in self.last_event_received:
                     for word in self.last_event_received["words"]:
                         print(word)
