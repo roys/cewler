@@ -6,7 +6,7 @@ XPATH_TEXT_INCLUDE_JAVASCRIPT_AND_CSS = "//comment() | //a[starts-with(@href, 'm
 XPATH_COMMENT                         = "//comment()"
 
 CONTROL_CHARACTERS_TO_FILTER_AWAY = r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]'  # Control chars except tab (\x09), LF (\x0A), CR (\x0D)
-CHARACTERS_TO_FILTER_AWAY = r'[\(\),./"\"?!""''´`:\{\}\[\]«»\*…•‹≈=■◦☀️„|_~✓+<>@;￼\\\\]|&&|--'
+CHARACTERS_TO_FILTER_AWAY = r"""[(),./"?!“”´`:{}\[\]«»*…•‹≈=■◦☀️„|_~✓+<>@;￼\\]|&&|--"""
 CHARACTERS_ALLOWED_IN_WORDS_BUT_NOT_IN_START_OR_END = "'ˈ-–━—&"
 
 # It's pretty impossible to use regex for emails (https://stackoverflow.com/a/201378/467650 ), so we'll just keep it simple with this one:
