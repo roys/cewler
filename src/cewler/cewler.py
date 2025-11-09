@@ -2,6 +2,7 @@
 import argparse
 import logging
 import math
+import os
 import sys
 import textwrap
 import time
@@ -62,7 +63,8 @@ class Cewler:
         parser.add_argument("--stream", action="store_true", default=False, help="writes to file after each request (may produce duplicates because of threading) (default: false)")
         parser.add_argument("-u", "--user-agent", default=constants.DEFAULT_USER_AGENT, help=f"User-Agent header to send (default: {constants.DEFAULT_USER_AGENT})")
         parser.add_argument("-H", "--header", dest="headers", action="append", metavar="HEADER", help="custom header in 'Name: Value' format (can be used multiple times, overrides -u if 'User-Agent' is specified)")
-        parser.add_argument("-v", "--verbose", action="store_true", help="A bit more detailed output")
+        parser.add_argument("-p", "--proxy", help="proxy URL ([http(s)://[user:pass@]]host[:port])")
+        parser.add_argument("-v", "--verbose", action="store_true", help="a bit more detailed output")
         parser.add_argument("-w", "--without-numbers", action="store_true", help="ignore words are numbers or contain numbers")
 
         args = parser.parse_args(args=None if sys.argv[1:] else ['--help'])
@@ -96,7 +98,7 @@ class Cewler:
         if 'User-Agent' not in headers:
             headers['User-Agent'] = config.user_agent
 
-        return {
+        settings = {
             # https://docs.scrapy.org/en/latest/topics/settings.html
             "DEFAULT_REQUEST_HEADERS": headers,
             "DEPTH_LIMIT": config.depth,
@@ -108,6 +110,13 @@ class Cewler:
             # "CONCURRENT_REQUESTS_PER_IP": 0
             # "CONCURRENT_REQUESTS": 16
         }
+
+        # Add proxy if specified
+        if config.proxy:
+            os.environ["http_proxy"] = config.proxy
+            os.environ["https_proxy"] = config.proxy
+
+        return settings
 
     def on_spider_event(self, event):
         """ Callback from spider with stats and other events """
@@ -148,6 +157,8 @@ class Cewler:
         static_ui_lines.append(["Strategy: ", f"[magenta]{nice_strategy}"])
         static_ui_lines.append(["Words: ", f"[magenta]{nice_words}"])
         static_ui_lines.append(["User-Agent: ", f"[magenta]{nice_ua}"])
+        if config.proxy:
+            static_ui_lines.append(["Proxy: ", f"[magenta]{config.proxy}"])
         static_ui_lines.append(["Output: ", f"[magenta]{nice_output}"])
         self.static_ui_lines = static_ui_lines
 
@@ -267,7 +278,8 @@ class Cewler:
                 output_emails=args.output_emails,
                 output_urls=args.output_urls,
                 stream=args.stream,
-                custom_headers=custom_headers
+                custom_headers=custom_headers,
+                proxy=args.proxy
             )
 
             self.live = self.get_live_ui(config)

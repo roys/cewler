@@ -62,12 +62,16 @@ It's easy to extract text from PDF files as well.
 `cewler --output wordlist.txt --include-pdf https://example.com`  
 
 #### Output visited URLs to file
-It's also possible to store the crawled files to a file.
+It's also possible to store the crawled files to a file.  
 `cewler --output wordlist.txt --output-urls urls.txt https://example.com`  
 
 #### Output e-mails to file
-It's also possible to store the scraped e-mail addresses to a separate file (they are always added to the wordlist).
+It's also possible to store the scraped e-mail addresses to a separate file (they are always added to the wordlist).  
 `cewler --output wordlist.txt --output-emails emails.txt https://example.com`  
+
+#### HTTP proxy
+You can specify a HTTP proxy.  
+`cewler --proxy http://localhost:8080 https://example.com`  
 
 #### Ninja trick 🥷
 If it just takes too long to crawl a site you can press `ctrl + c` once(!) and wait while the spider finishes the current requests and then whatever words have been found so far is stored to the output file.
@@ -75,7 +79,10 @@ If it just takes too long to crawl a site you can press `ctrl + c` once(!) and w
 ### All options
 ```
 cewler -h
-usage: cewler [-h] [-d DEPTH] [-js] [-l] [-m MIN_WORD_LENGTH] [-o OUTPUT] [-ou OUTPUT_URLS] [-r RATE] [-s {all,children,exact}] [--stream] [-u USER_AGENT] [-v] [-w] url
+usage: cewler [-h] [-d DEPTH] [-css] [-js] [-pdf] [-l] [-m MIN_WORD_LENGTH] [-o OUTPUT] [-oe OUTPUT_EMAILS]
+              [-ou OUTPUT_URLS] [-r RATE] [-s {all,children,exact}] [--stream] [-u USER_AGENT] [-H HEADER] [-p PROXY]
+              [-v] [-w]
+              url
 
 CeWLeR - Custom Word List generator Redefined
 
@@ -84,26 +91,31 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -d DEPTH, --depth DEPTH
-                        directory path depth to crawl, 0 for unlimited (default: 2)
+  -d, --depth DEPTH     directory path depth to crawl, 0 for unlimited (default: 2)
   -css, --include-css   include CSS from external files and <style> tags
   -js, --include-js     include JavaScript from external files and <script> tags
   -pdf, --include-pdf   include text from PDF files
   -l, --lowercase       lowercase all parsed words
-  -m MIN_WORD_LENGTH, --min-word-length MIN_WORD_LENGTH
-  -o OUTPUT, --output OUTPUT
-                        file were to stream and store wordlist instead of screen (default: screen)
-  -oe OUTPUT_EMAILS, --output-emails OUTPUT_EMAILS
-                        file were to stream and store e-mail addresses found (they will always be outputted in the wordlist)
-  -ou OUTPUT_URLS, --output-urls OUTPUT_URLS
+  -m, --min-word-length MIN_WORD_LENGTH
+                        minimum word length to include (default: 5)
+  -o, --output OUTPUT   file were to stream and store wordlist instead of screen (default: screen)
+  -oe, --output-emails OUTPUT_EMAILS
+                        file were to stream and store e-mail addresses found (they will always be outputted in the
+                        wordlist)
+  -ou, --output-urls OUTPUT_URLS
                         file were to stream and store URLs visited (default: not outputted)
-  -r RATE, --rate RATE  requests per second (default: 20)
-  -s {all,children,exact}, --subdomain_strategy {all,children,exact}
-                        allow crawling [all] domains, including children and siblings, only [exact] the same (sub)domain (default), or same domain and any belonging [children]
+  -r, --rate RATE       requests per second (default: 20)
+  -s, --subdomain_strategy {all,children,exact}
+                        allow crawling [all] domains, including children and siblings, only [exact] the same (sub)domain
+                        (default), or same domain and any belonging [children]
   --stream              writes to file after each request (may produce duplicates because of threading) (default: false)
-  -u USER_AGENT, --user-agent USER_AGENT
-                        User-Agent header to send (default: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36)
-  -v, --verbose         A bit more detailed output
+  -u, --user-agent USER_AGENT
+                        User-Agent header to send (default: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                        (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36)
+  -H, --header HEADER   custom header in 'Name: Value' format (can be used multiple times, overrides -u if 'User-Agent'
+                        is specified)
+  -p, --proxy PROXY     proxy URL ([http(s)://[user:pass@]]host[:port])
+  -v, --verbose         a bit more detailed output
   -w, --without-numbers
                         ignore words are numbers or contain numbers
 ```

@@ -22,3 +22,4 @@ class CewlerConfig:
     output_urls: str = None
     stream: bool = False
     custom_headers: Dict[str, str] = field(default_factory=dict)
+    proxy: str = None
