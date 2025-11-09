@@ -9,7 +9,7 @@ source venv/bin/activate
 python3 -m pip install --upgrade build
 python3 -m pip install --upgrade twine
 python3 -m build
-python3 -m twine upload --repository pypi dist/cewler-1.4.0*
+python3 -m twine upload --repository pypi dist/cewler-1.4.1*
 
 python3 -m pip install cewler --upgrade
 
@@ -54,7 +54,7 @@ Running command: python3 src/cewler/cewler.py  http://localhost:8000 -o wordlist
 
 
 ## Release tagging
-git tag -a v1.4.0 -m "Release"
+git tag -a v1.4.1 -m "Release"
 git push --tags
 
 

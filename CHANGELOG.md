@@ -4,8 +4,9 @@ Changelog for _cewler_.
 List of changes, newest changes first.
 ('+' = new feature, '-' = removed feature, '*' = changed feature)
 
-## Next version (work in progress)
+## Version 1.4.1
  \* + Added support for custom HTTP headers using argument `-H`/`--header` with `Name: Value`.  
+\* + Added support for proxy (`--proxy http://localhost:8080`). 
 ## Version 1.4.0
  \* Breaking change: Python requirement >=3.7 → >=3.9.  
  \* Removed requirements.txt (using pyproject.toml exclusively).  
@@ -14,8 +15,8 @@ List of changes, newest changes first.
  \* Library upgrades and changed compatible release operator.  
  \* Stopped specifying `Twisted` version now that `Scrapy` is updated.  
  \* Changed default User-Agent to `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36`.  
- \* Improved special character filter.
- \+ Started filtering out emojis and symbols.
+ \* Improved special character filter.  
+ \+ Started filtering out emojis and symbols.  
 ## Version 1.3.1
  \+ Added support for application/json (always enabled, no flags)  
 ## Version 1.3.0
