@@ -143,9 +143,19 @@ class Cewler:
         nice_strategy += f", max depth {config.depth}"
         nice_strategy += f", {config.rate} reqs/s"
         nice_words = "Lowercase" if config.lowercase else "Mixed case"
-        nice_words += ", " + ("excl." if config.without_numbers else "incl.") + " numbers"
-        nice_words += ", incl. JS" if config.include_js else ""
-        nice_words += ", incl. CSS" if config.include_css else ""
+        if config.without_numbers:
+            nice_words += ", excl. numbers"
+        includes = []
+        if not config.without_numbers:
+            includes.append("numbers")
+        if config.include_js:
+            includes.append("JS")
+        if config.include_css:
+            includes.append("CSS")
+        if config.include_pdf:
+            includes.append("PDF")
+        if includes:
+            nice_words += ", incl. " + " + ".join(includes)
         nice_words += f", min. {config.min_word_length} chars."
         nice_ua = "Default" if constants.DEFAULT_USER_AGENT == config.user_agent else "Custom"
         nice_ua += " (" + textwrap.shorten(config.user_agent, width=40, placeholder="...") + ")"
