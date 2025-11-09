@@ -39,7 +39,7 @@ The default User-Agent is a common browser.
 `cewler --output wordlist.txt --user-agent "Cewler" https://example.com`  
 
 #### Add custom HTTP headers
-It's possible to specify custom HTTP headers for the requests.  
+It's possible to specify custom HTTP headers for the requests. Multiple headers can be specified. 
 `cewler -H "X-Bounty: d14c14ec" https://httpbin.org/headers`  
 
 #### Control casing, word length and characters
