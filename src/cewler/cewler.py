@@ -65,7 +65,7 @@ class Cewler:
         parser.add_argument("-H", "--header", dest="headers", action="append", metavar="HEADER", help="custom header in 'Name: Value' format (can be used multiple times, overrides -u if 'User-Agent' is specified)")
         parser.add_argument("-p", "--proxy", help="proxy URL ([http(s)://[user:pass@]]host[:port])")
         parser.add_argument("-v", "--verbose", action="store_true", help="a bit more detailed output")
-        parser.add_argument("-w", "--without-numbers", action="store_true", help="ignore words are numbers or contain numbers")
+        parser.add_argument("-w", "--without-numbers", action="store_true", help="ignore words that are numbers or contain numbers")
 
         args = parser.parse_args(args=None if sys.argv[1:] else ['--help'])
         if "://" not in args.url:  # Missing scheme in request url - let try to help out the user by prefixing it with http

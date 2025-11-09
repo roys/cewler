@@ -117,7 +117,7 @@ options:
   -p, --proxy PROXY     proxy URL ([http(s)://[user:pass@]]host[:port])
   -v, --verbose         a bit more detailed output
   -w, --without-numbers
-                        ignore words are numbers or contain numbers
+                        ignore words that are numbers or contain numbers
 ```
 
 ### Subdomain strategies
