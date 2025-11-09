@@ -20,6 +20,7 @@ _CeWLeR_ was sort of originally inspired by the really nice tool [CeWL](https://
   - Text can be extracted from PDF files (using [pypdf](https://pypi.org/project/pypdf/))
   - Crawled URLs can be output to separate file
   - Scraped e-mail addresses can also be output to separate file
+  - Custom HTTP headers can be added
   - ++
 - Using the excellent [Scrapy](https://scrapy.org) framework for scraping and using the beautiful [rich](https://github.com/Textualize/rich) library for terminal output
 
@@ -36,6 +37,10 @@ The rate is specified in requests per second. Please play nicely and don't break
 #### Change User-Agent header
 The default User-Agent is a common browser.  
 `cewler --output wordlist.txt --user-agent "Cewler" https://example.com`  
+
+#### Add custom HTTP headers
+It's possible to specify custom HTTP headers for the requests.  
+`cewler -H "X-Bounty: d14c14ec" https://httpbin.org/headers`  
 
 #### Control casing, word length and characters
 Unless specified the words will have mixed case and be of at least 5 in length.  

@@ -61,6 +61,7 @@ class Cewler:
         parser.add_argument("-s", "--subdomain_strategy", choices=["all", "children", "exact"], default="exact", help="allow crawling [all] domains, including children and siblings, only [exact] the same (sub)domain (default), or same domain and any belonging [children]")
         parser.add_argument("--stream", action="store_true", default=False, help="writes to file after each request (may produce duplicates because of threading) (default: false)")
         parser.add_argument("-u", "--user-agent", default=constants.DEFAULT_USER_AGENT, help=f"User-Agent header to send (default: {constants.DEFAULT_USER_AGENT})")
+        parser.add_argument("-H", "--header", dest="headers", action="append", metavar="HEADER", help="custom header in 'Name: Value' format (can be used multiple times, overrides -u if 'User-Agent' is specified)")
         parser.add_argument("-v", "--verbose", action="store_true", help="A bit more detailed output")
         parser.add_argument("-w", "--without-numbers", action="store_true", help="ignore words are numbers or contain numbers")
 
@@ -89,9 +90,15 @@ class Cewler:
             offsite_class: 1337
         }
 
+        # Build headers dict
+        headers = dict(config.custom_headers)  # Copy custom headers
+        # Add User-Agent if not overridden by custom headers
+        if 'User-Agent' not in headers:
+            headers['User-Agent'] = config.user_agent
+
         return {
             # https://docs.scrapy.org/en/latest/topics/settings.html
-            "USER_AGENT": config.user_agent,
+            "DEFAULT_REQUEST_HEADERS": headers,
             "DEPTH_LIMIT": config.depth,
             "DOWNLOAD_DELAY": 1/config.rate,
             "CONCURRENT_REQUESTS_PER_DOMAIN": 8,  # Maintain Scrapy 2.12 default (2.13+ changed to 1)
@@ -233,6 +240,15 @@ class Cewler:
         try:
             args = self.get_parsed_args_and_init_parser()
 
+            # Parse custom headers
+            custom_headers = {}
+            if args.headers:
+                for header in args.headers:
+                    if ':' not in header:
+                        exit(f"cewler: error: Invalid header format: '{header}'. Use 'Name: Value'")
+                    name, value = header.split(':', 1)
+                    custom_headers[name.strip()] = value.strip()
+
             # Create config object from args
             config = CewlerConfig(
                 url=args.url,
@@ -250,7 +266,8 @@ class Cewler:
                 output=args.output,
                 output_emails=args.output_emails,
                 output_urls=args.output_urls,
-                stream=args.stream
+                stream=args.stream,
+                custom_headers=custom_headers
             )
 
             self.live = self.get_live_ui(config)

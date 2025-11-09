@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Dict
 
 
 @dataclass
@@ -20,3 +21,4 @@ class CewlerConfig:
     output_emails: str = None
     output_urls: str = None
     stream: bool = False
+    custom_headers: Dict[str, str] = field(default_factory=dict)
