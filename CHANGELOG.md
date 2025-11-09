@@ -4,6 +4,8 @@ Changelog for _cewler_.
 List of changes, newest changes first.
 ('+' = new feature, '-' = removed feature, '*' = changed feature)
 
+## Next version (work in progress)
+ \* + Added support for custom HTTP headers using argument `-H`/`--header` with `Name: Value`.  
 ## Version 1.4.0
  \* Breaking change: Python requirement >=3.7 → >=3.9.  
  \* Removed requirements.txt (using pyproject.toml exclusively).  

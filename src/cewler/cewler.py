@@ -244,9 +244,9 @@ class Cewler:
             custom_headers = {}
             if args.headers:
                 for header in args.headers:
-                    if ':' not in header:
+                    if ":" not in header:
                         exit(f"cewler: error: Invalid header format: '{header}'. Use 'Name: Value'")
-                    name, value = header.split(':', 1)
+                    name, value = header.split(":", 1)
                     custom_headers[name.strip()] = value.strip()
 
             # Create config object from args
