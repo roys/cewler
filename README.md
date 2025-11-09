@@ -31,7 +31,7 @@ Will output to screen unless a file is specified.
 `cewler --output wordlist.txt https://example.com`  
 
 #### Control speed and depth
-The rate is specified in requests per second. Please play nicely and don't break any rules.  
+The rate is specified in requests per second. Depth controls link hops from the start URL (not URL path depth). Please play nicely and don't break any rules.
 `cewler --output wordlist.txt --rate 5 --depth 2 https://example.com`  
 
 #### Change User-Agent header
@@ -91,7 +91,7 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -d, --depth DEPTH     directory path depth to crawl, 0 for unlimited (default: 2)
+  -d, --depth DEPTH     max link hops from start URL, 0 for unlimited (default: 2)
   -css, --include-css   include CSS from external files and <style> tags
   -js, --include-js     include JavaScript from external files and <script> tags
   -pdf, --include-pdf   include text from PDF files

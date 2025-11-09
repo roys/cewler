@@ -49,7 +49,7 @@ class Cewler:
         parser = argparse.ArgumentParser(prog=__program__.lower(), allow_abbrev=False, description=f"{__program__} v.{__version__} - {__description__}", epilog="Visit https://github.com/roys/cewler for more information")
 
         parser.add_argument("url", help="URL to start crawling from")
-        parser.add_argument("-d", "--depth", type=int, default=2, help="directory path depth to crawl, 0 for unlimited (default: 2)")
+        parser.add_argument("-d", "--depth", type=int, default=2, help="max link hops from start URL, 0 for unlimited (default: 2)")
         parser.add_argument("-css", "--include-css", action="store_true", help="include CSS from external files and <style> tags")
         parser.add_argument("-js", "--include-js", action="store_true", help="include JavaScript from external files and <script> tags")
         parser.add_argument("-pdf", "--include-pdf", action="store_true", help="include text from PDF files")
