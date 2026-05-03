@@ -33,6 +33,7 @@ classifiers = [
 
 [project.scripts]
 cewler = "cewler.cewler:main"
+cewler-wordlist = "cewler.wordlist_from_files:main"
 
 [project.urls]
 "Homepage" = "https://github.com/roys/cewler"
