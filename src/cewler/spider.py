@@ -1,26 +1,24 @@
-import html
 import re
 import scrapy
 import scrapy.exceptions
 import tld
-import urllib.parse
-import io
 from scrapy import signals
 from scrapy.linkextractors import LinkExtractor
 from scrapy.downloadermiddlewares import offsite
 from scrapy.spiders import CrawlSpider, Rule
 import scrapy.core.downloader.handlers.http
-from pypdf import PdfReader
 
 try:
     from . import constants
     from .config import CewlerConfig
+    from .parsing import parse_pdf_to_text, parse_words_and_emails
 except ImportError:  # When running this file directly
     import os
     import sys
     sys.path.insert(0, os.path.abspath('.'))
     import constants
     from config import CewlerConfig
+    from parsing import parse_pdf_to_text, parse_words_and_emails
 
 
 class OnlyExactSameDomainSpiderMiddleware(offsite.OffsiteMiddleware):
@@ -177,44 +175,12 @@ class CewlerSpider(CrawlSpider):
         self.send_spider_callback()
 
     def _get_words_and_emails_from_text(self, text):
-        new_words = []
-        new_emails = []
-        text = html.unescape(text)
-        text = urllib.parse.unquote(text)
-        text = re.sub(constants.CONTROL_CHARACTERS_TO_FILTER_AWAY, "", text)  # Remove control characters
-        text = re.sub(constants.EMOJI_RANGES_TO_FILTER_AWAY, " ", text)  # Remove emojis
-
-        email_list = re.findall(constants.REGEX_EMAIL, text)
-        for email in email_list:
-            if self.should_lowercase:
-                email = email.lower()
-            new_emails.append(email)
-            new_words.append(email)
-
-        text = re.sub(constants.CHARACTERS_TO_FILTER_AWAY, " ", text)  # Filter characters (incl. @, so need this after email extraction)
-        text = re.sub(r"\s+", " ", text)  # Replace all spacing with one space
-        if self.should_lowercase:
-            text = text.lower()
-        for word in text.split(" "):
-            word = word.strip()
-            while True:
-                found = False
-                for c in constants.CHARACTERS_ALLOWED_IN_WORDS_BUT_NOT_IN_START_OR_END:
-                    if word.startswith(c):
-                        word = word[1:]
-                        found = True
-                    if word.endswith(c):
-                        word = word[:-1]
-                        found = True
-                if not found:
-                    break
-            if len(word) >= max(1, self.min_word_length):
-                if self.without_numbers:
-                    if not bool(re.search(r'\d', word)):
-                        new_words.append(word)
-                else:
-                    new_words.append(word)
-        return (set(new_words), set(new_emails))
+        return parse_words_and_emails(
+            text,
+            min_word_length=self.min_word_length,
+            lowercase=self.should_lowercase,
+            without_numbers=self.without_numbers,
+        )
 
     def _get_words_from_text_response(self, text):
         new_words = set()
@@ -274,14 +240,7 @@ class CewlerSpider(CrawlSpider):
         return new_words
 
     def _get_words_from_pdf(self, pdf_body):
-        pdf_text = ""
-        try:
-            pdf_reader = PdfReader(io.BytesIO(pdf_body))
-            for page in pdf_reader.pages:
-                pdf_text += " " + page.extract_text()
-        except Exception:
-            pass
-        return pdf_text
+        return parse_pdf_to_text(pdf_body)
 
     def is_supported_text_content_type(self, content_type):
         return content_type.startswith(constants.SUPPORTED_TEXT_CONTENT_TYPES)
